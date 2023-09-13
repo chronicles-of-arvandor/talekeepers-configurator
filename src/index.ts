@@ -2,6 +2,7 @@ import * as readline from 'readline';
 import { menu, option } from './menu/menu';
 import { displaySettingsMenu } from './menu/settings/settingsMenu';
 import { displayAncestriesMenu } from './menu/ancestry/ancestriesMenu';
+import { displayBackgroundsMenu } from './menu/background/backgroundsMenu';
 
 export function displayMainMenu(rl: readline.Interface) {
   menu(
@@ -9,9 +10,9 @@ export function displayMainMenu(rl: readline.Interface) {
     option('Ancestries', () => {
       displayAncestriesMenu(rl);
     }),
-    // option('Backgrounds', () => {
-    //   displayBackgroundsMenu(rl);
-    // }),
+    option('Backgrounds', () => {
+      displayBackgroundsMenu(rl);
+    }),
     // option('Choices', () => {
     //   displayChoicesMenu(rl);
     // }),

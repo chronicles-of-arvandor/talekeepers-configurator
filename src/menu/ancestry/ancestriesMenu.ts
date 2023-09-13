@@ -5,7 +5,6 @@ import { menu, option } from '../menu';
 import { displayMainMenu } from '../../index';
 import * as uuid from 'uuid';
 import { Distance } from '../../models/distance';
-import { displaySubAncestryMenu } from './subancestry/subAncestryMenu';
 import * as path from 'path';
 import { green } from 'chalk';
 

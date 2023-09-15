@@ -5,7 +5,7 @@ export class Skill {
   displayName: string;
   ability: Ability;
 
-  constructor(name: string, displayName: string, ability: Ability) {
+  private constructor(name: string, displayName: string, ability: Ability) {
     this.name = name;
     this.displayName = displayName;
     this.ability = ability;
@@ -52,5 +52,28 @@ export class Skill {
       case 'SURVIVAL': return Skill.SURVIVAL;
       default: throw new Error(`Unknown skill name: ${name}`);
     }
+  }
+
+  static values() {
+    return [
+      Skill.ACROBATICS,
+      Skill.ANIMAL_HANDLING,
+      Skill.ARCANA,
+      Skill.ATHLETICS,
+      Skill.DECEPTION,
+      Skill.HISTORY,
+      Skill.INSIGHT,
+      Skill.INTIMIDATION,
+      Skill.INVESTIGATION,
+      Skill.MEDICINE,
+      Skill.NATURE,
+      Skill.PERCEPTION,
+      Skill.PERFORMANCE,
+      Skill.PERSUASION,
+      Skill.RELIGION,
+      Skill.SLEIGHT_OF_HAND,
+      Skill.STEALTH,
+      Skill.SURVIVAL
+    ]
   }
 }

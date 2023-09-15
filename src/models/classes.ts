@@ -104,6 +104,10 @@ export class Clazz implements ConfigurationSerializable {
     this.features = features;
   }
 
+  getSubClassById(id: string) {
+    return this.subClasses.find((subClass) => subClass.id === id);
+  }
+
   serialize(): { [key: string]: any } {
     return {
       '==': 'Class',

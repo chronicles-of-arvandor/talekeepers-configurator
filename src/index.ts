@@ -3,6 +3,7 @@ import { menu, option } from './menu/menu';
 import { displaySettingsMenu } from './menu/settings/settingsMenu';
 import { displayAncestriesMenu } from './menu/ancestry/ancestriesMenu';
 import { displayBackgroundsMenu } from './menu/background/backgroundsMenu';
+import { displayChoicesMenu } from './menu/choice/choicesMenu';
 
 export function displayMainMenu(rl: readline.Interface) {
   menu(
@@ -13,9 +14,9 @@ export function displayMainMenu(rl: readline.Interface) {
     option('Backgrounds', () => {
       displayBackgroundsMenu(rl);
     }),
-    // option('Choices', () => {
-    //   displayChoicesMenu(rl);
-    // }),
+    option('Choices', () => {
+      displayChoicesMenu(rl);
+    }),
     // option('Classes', () => {
     //   displayClassesMenu(rl);
     // }),

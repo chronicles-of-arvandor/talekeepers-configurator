@@ -141,6 +141,10 @@ export class Ancestry implements ConfigurationSerializable {
     this.skullTexture = skullTexture;
   }
 
+  getSubAncestryById(id: string) {
+    return this.subAncestries.find((subAncestry) => subAncestry.id === id);
+  }
+
   serialize(): { [key: string]: any; } {
     return {
       '==': 'Ancestry',

@@ -116,6 +116,29 @@ export class ChoicePrerequisite implements Prerequisite {
   }
 }
 
+export class ClassPrerequisite implements Prerequisite {
+  classId: string;
+  level: number;
+
+  constructor(classId: string, level: number) {
+    this.classId = classId;
+    this.level = level;
+  }
+
+  getName() {
+    const clazz = getClassById(this.classId);
+    return `Class: Lv${this.level} ${clazz?.name ?? 'Unknown'}`
+  }
+
+  serialize(): { [key: string]: any } {
+    return {
+      '==': 'ClassPrerequisite',
+      'class-id': this.classId,
+      'level': this.level
+    }
+  }
+}
+
 export class FeatPrerequisite implements Prerequisite {
   featId: string;
 

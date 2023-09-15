@@ -27,4 +27,15 @@ export class Ability {
       default: throw new Error(`Unknown ability name: ${name}`);
     }
   }
+
+  static values() {
+    return [
+      Ability.STRENGTH,
+      Ability.DEXTERITY,
+      Ability.CONSTITUTION,
+      Ability.INTELLIGENCE,
+      Ability.WISDOM,
+      Ability.CHARISMA
+    ]
+  }
 }

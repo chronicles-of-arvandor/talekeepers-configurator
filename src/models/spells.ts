@@ -3,6 +3,7 @@ import * as fs from 'fs';
 import { parse } from 'yaml';
 import { getBaseDirectory } from '../settings';
 import { ConfigurationSerializable } from './configurationSerializable';
+import { Ability } from './abilities';
 
 export const getSpellsDirectory = () => path.join(getBaseDirectory(), 'spells');
 
@@ -633,15 +634,6 @@ export type Condition =
   | 'UNCONSCIOUS'
   ;
 
-export type Ability =
-  | 'STRENGTH'
-  | 'DEXTERITY'
-  | 'CONSTITUTION'
-  | 'INTELLIGENCE'
-  | 'WISDOM'
-  | 'CHARISMA'
-  ;
-
 export type CreatureType =
   | 'ABERRATION'
   | 'BEAST'
@@ -814,7 +806,7 @@ export class Spell {
       'damage-inflict': this.damageInflict,
       'spell-attack': this.spellAttack,
       'condition-inflict': this.conditionInflict,
-      'saving-throw': this.savingThrow,
+      'saving-throw': this.savingThrow?.map((ability) => ability.name),
       'affects-creature-type': this.affectsCreatureType,
       'misc-tags': this.miscTags,
       'area-tags': this.areaTags

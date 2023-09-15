@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import { parse } from 'yaml';
+import { parse, stringify } from 'yaml';
 import { getBaseDirectory } from '../settings';
 import { deserializePrerequisite, Prerequisite } from './prerequisites';
 import { ConfigurationSerializable } from './configurationSerializable';
@@ -62,6 +62,10 @@ export class Choice implements ConfigurationSerializable {
     this.options = options;
   }
 
+  getOptionById(id: string) {
+    return this.options.find((option) => option.id === id);
+  }
+
   serialize(): { [key: string]: any } {
     return {
       '==': 'Choice',
@@ -70,6 +74,10 @@ export class Choice implements ConfigurationSerializable {
       'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize()),
       'options': this.options.map((option) => option.serialize())
     }
+  }
+
+  save() {
+    fs.writeFileSync(this.file, stringify(this.serialize()));
   }
 }
 

@@ -15,6 +15,14 @@ export const getAncestries = () => {
   });
 }
 
+export const getAncestryById = (id: string) => {
+  return getAncestries().find((ancestry) => ancestry.id === id);
+}
+
+export const getAncestryByName = (name: string) => {
+  return getAncestries().find((ancestry) => ancestry.name === name);
+}
+
 export class AncestryTrait implements ConfigurationSerializable {
   name: string;
   description: string;

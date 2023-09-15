@@ -12,6 +12,14 @@ export const getBackgrounds = () => {
   });
 }
 
+export const getBackgroundById = (id: string) => {
+  return getBackgrounds().find((background) => background.id === id);
+}
+
+export const getBackgroundByName = (name: string) => {
+  return getBackgrounds().find((background) => background.name === name);
+}
+
 export class Background implements ConfigurationSerializable {
   file: string;
   id: string;

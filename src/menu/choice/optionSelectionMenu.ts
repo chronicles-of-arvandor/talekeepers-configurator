@@ -6,14 +6,13 @@ export function displayOptionSelectionMenu(
   choice: Choice,
   backAction: string,
   back: () => void,
-  save: (option: ChoiceOption) => void,
+  callback: (option: ChoiceOption) => void,
   rl: readline.Interface
 ) {
   menu(
     'Option',
     ...choice.options.map((opt) => option(opt.text, () => {
-      save(opt);
-      back();
+      callback(opt);
     })),
     option(backAction, back)
   ).display(rl);

@@ -72,6 +72,7 @@ function displayAbilityPrerequisiteMenu(prerequisite: AbilityPrerequisite, backA
         (ability) => {
           prerequisite.ability = ability;
           save(prerequisite);
+          displayAbilityPrerequisiteMenu(prerequisite, backAction, back, save, rl);
         },
         rl
       );
@@ -102,6 +103,7 @@ function displayAncestryPrerequisiteMenu(prerequisite: AncestryPrerequisite, bac
         (ancestry) => {
           prerequisite.ancestryId = ancestry.id;
           save(prerequisite);
+          displayAncestryPrerequisiteMenu(prerequisite, backAction, back, save, rl);
         },
         rl
       );
@@ -138,6 +140,7 @@ function displayBackgroundPrerequisiteMenu(prerequisite: BackgroundPrerequisite,
         (background) => {
           prerequisite.backgroundId = background.id;
           save(prerequisite);
+          displayBackgroundPrerequisiteMenu(prerequisite, backAction, back, save, rl);
         },
         rl
       );
@@ -158,6 +161,7 @@ function displayChoicePrerequisiteMenu(prerequisite: ChoicePrerequisite, backAct
         (choice) => {
           prerequisite.choiceId = choice.id;
           save(prerequisite);
+          displayChoicePrerequisiteMenu(prerequisite, backAction, back, save, rl);
         },
         rl
       )
@@ -175,6 +179,7 @@ function displayChoicePrerequisiteMenu(prerequisite: ChoicePrerequisite, backAct
         (option) => {
           prerequisite.optionId = option.id;
           save(prerequisite);
+          displayChoicePrerequisiteMenu(prerequisite, backAction, back, save, rl);
         },
         rl
       )

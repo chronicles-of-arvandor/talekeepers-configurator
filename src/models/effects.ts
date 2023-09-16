@@ -1,6 +1,6 @@
 import * as path from 'path';
 import * as fs from 'fs';
-import { parse } from 'yaml';
+import { parse, stringify } from 'yaml';
 import { getBaseDirectory } from '../settings';
 import { ConfigurationSerializable } from './configurationSerializable';
 import { deserializePrerequisite, Prerequisite } from './prerequisites';
@@ -10,7 +10,7 @@ import { Skill } from './skills';
 
 export const getEffectsDirectory = () => path.join(getBaseDirectory(), 'effects');
 
-const getEffects = () => {
+export const getEffects: () => Effect[] = () => {
   return fs.readdirSync(getEffectsDirectory()).map((effectFile) => {
     let effectPath = path.join(getEffectsDirectory(), effectFile);
     return deserializeEffect(effectPath, parse(fs.readFileSync(effectPath, 'utf8')).effect);
@@ -20,6 +20,7 @@ const getEffects = () => {
 export interface Effect extends ConfigurationSerializable {
   file: string;
   prerequisites: Prerequisite[];
+  save(): void;
 }
 
 export class AbilityEffect implements Effect {
@@ -39,6 +40,12 @@ export class AbilityEffect implements Effect {
       'abilities': this.abilities,
       'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
     }
+  }
+
+  save() {
+    fs.writeFileSync(this.file, stringify({
+      effect: this.serialize()
+    }));
   }
 }
 
@@ -60,6 +67,12 @@ export class CharacterTraitEffect implements Effect {
       'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
     }
   }
+
+  save() {
+    fs.writeFileSync(this.file, stringify({
+      effect: this.serialize()
+    }));
+  }
 }
 
 export class FeatEffect implements Effect {
@@ -79,6 +92,12 @@ export class FeatEffect implements Effect {
       'feats': this.feats,
       'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
     }
+  }
+
+  save() {
+    fs.writeFileSync(this.file, stringify({
+      effect: this.serialize()
+    }));
   }
 }
 
@@ -100,6 +119,12 @@ export class ItemProficiencyEffect implements Effect {
       'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
     }
   }
+
+  save() {
+    fs.writeFileSync(this.file, stringify({
+      effect: this.serialize()
+    }));
+  }
 }
 
 export class LanguageEffect implements Effect {
@@ -119,6 +144,12 @@ export class LanguageEffect implements Effect {
       'languages': this.languages,
       'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
     }
+  }
+
+  save() {
+    fs.writeFileSync(this.file, stringify({
+      effect: this.serialize()
+    }));
   }
 }
 
@@ -140,6 +171,12 @@ export class SavingThrowProficiencyEffect implements Effect {
       'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
     }
   }
+
+  save() {
+    fs.writeFileSync(this.file, stringify({
+      effect: this.serialize()
+    }));
+  }
 }
 
 export class SkillProficiencyEffect implements Effect {
@@ -159,6 +196,12 @@ export class SkillProficiencyEffect implements Effect {
       'skills': this.skills.map((skill) => skill.name),
       'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
     }
+  }
+
+  save() {
+    fs.writeFileSync(this.file, stringify({
+      effect: this.serialize()
+    }));
   }
 }
 
@@ -180,6 +223,12 @@ export class SpeedEffect implements Effect {
       'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
     }
   }
+
+  save() {
+    fs.writeFileSync(this.file, stringify({
+      effect: this.serialize()
+    }));
+  }
 }
 
 export class SpellEffect implements Effect {
@@ -199,6 +248,12 @@ export class SpellEffect implements Effect {
       'spells': this.spells,
       'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
     }
+  }
+
+  save() {
+    fs.writeFileSync(this.file, stringify({
+      effect: this.serialize()
+    }));
   }
 }
 

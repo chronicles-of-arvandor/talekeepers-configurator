@@ -15,6 +15,7 @@ export const getSpells = () => {
 }
 
 export const getSpellById = (id: string) => getSpells().find((spell) => spell.id === id);
+export const getSpellByName = (name: string) => getSpells().find((spell) => spell.name === name);
 
 export type SpellSchool =
   | 'ABJURATION'

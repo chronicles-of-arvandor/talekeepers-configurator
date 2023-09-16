@@ -5,15 +5,14 @@ import * as readline from 'readline';
 export function displayChoiceSelectionMenu(
   backAction: string,
   back: () => void,
-  save: (choice: Choice) => void,
+  callback: (choice: Choice) => void,
   rl: readline.Interface
 ) {
   const choices = getChoices();
   menu(
     'Choice',
     ...choices.map((choice) => option(choice.text, () => {
-      save(choice);
-      back();
+      callback(choice);
     })),
     option(backAction, back)
   ).display(rl);

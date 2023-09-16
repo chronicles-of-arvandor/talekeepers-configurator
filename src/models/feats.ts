@@ -15,6 +15,7 @@ export const getFeats = () => {
 }
 
 export const getFeatById = (id: string) => getFeats().find((feat) => feat.id === id);
+export const getFeatByName = (name: string) => getFeats().find((feat) => feat.name === name);
 
 export interface FeatEntry extends ConfigurationSerializable {}
 

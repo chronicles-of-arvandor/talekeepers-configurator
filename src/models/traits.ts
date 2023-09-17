@@ -11,6 +11,7 @@ export class CharacterTrait implements ConfigurationSerializable {
 
   serialize(): { [key: string]: any } {
     return {
+      '==': 'CharacterTrait',
       'name': this.name,
       'description': this.description
     };

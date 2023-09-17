@@ -4,6 +4,7 @@ import { displaySettingsMenu } from './menu/settings/settingsMenu';
 import { displayAncestriesMenu } from './menu/ancestry/ancestriesMenu';
 import { displayBackgroundsMenu } from './menu/background/backgroundsMenu';
 import { displayChoicesMenu } from './menu/choice/choicesMenu';
+import { displayEffectsMenu } from './menu/effect/effectsMenu';
 
 export function displayMainMenu(rl: readline.Interface) {
   menu(
@@ -20,9 +21,9 @@ export function displayMainMenu(rl: readline.Interface) {
     // option('Classes', () => {
     //   displayClassesMenu(rl);
     // }),
-    // option('Effects', () => {
-    //   displayEffectsMenu(rl);
-    // }),
+    option('Effects', () => {
+      displayEffectsMenu(rl);
+    }),
     // option('Feats', () => {
     //   displayFeatsMenu(rl);
     // }),

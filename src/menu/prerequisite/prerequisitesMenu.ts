@@ -313,5 +313,5 @@ function displayNewPrerequisiteMenu(backAction: string, back: () => void, save: 
     option(backAction, () => {
       back();
     })
-  )
+  ).display(rl);
 }

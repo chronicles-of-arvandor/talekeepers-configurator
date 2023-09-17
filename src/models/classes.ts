@@ -62,11 +62,12 @@ export class SubClass implements ConfigurationSerializable {
 }
 
 function deserializeSubClass(serialized: { [key: string]: any }) {
+  const features = serialized['features'] ?? {};
   return new SubClass(
     serialized['id'],
     serialized['name'],
     Object.fromEntries(
-      Object.entries(serialized['features'] as { [key: string]: { [key: string]: string }[] })
+      Object.entries(features as { [level: string]: { [key: string]: string }[] })
         .map(([level, features]: [string, { [key: string]: any }[]]) => {
           return [parseInt(level), features.map((feature) => {
             return new ClassFeature(feature['name'], feature['description'])

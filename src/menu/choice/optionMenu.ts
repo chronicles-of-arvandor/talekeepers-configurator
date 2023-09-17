@@ -31,5 +31,5 @@ export function displayOptionMenu(opt: ChoiceOption, backAction: string, back: (
       back();
     }),
     option(backAction, back)
-  )
+  ).display(rl);
 }

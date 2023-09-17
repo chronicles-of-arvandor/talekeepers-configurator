@@ -36,7 +36,9 @@ export class ChoiceOption implements ConfigurationSerializable {
       '==': 'ChoiceOption',
       'id': this.id,
       'text': this.text,
-      'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
+      'prerequisites': (this.prerequisites.length ?? 0) > 0
+        ? this.prerequisites.map((prerequisite) => prerequisite.serialize())
+        : undefined
     }
   }
 }
@@ -77,7 +79,9 @@ export class Choice implements ConfigurationSerializable {
   }
 
   save() {
-    fs.writeFileSync(this.file, stringify(this.serialize()));
+    fs.writeFileSync(this.file, stringify({
+      choice: this.serialize()
+    }));
   }
 }
 
@@ -85,7 +89,7 @@ function deserializeChoiceOption(serialized: { [key: string]: any }) {
   return new ChoiceOption(
     serialized['id'],
     serialized['text'],
-    serialized['prerequisites'].map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite))
+    serialized['prerequisites']?.map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite)) ?? []
   )
 }
 

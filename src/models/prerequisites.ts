@@ -381,6 +381,10 @@ export function deserializePrerequisite(serialized: { [key: string]: any }): Pre
       serialized['choice-id'],
       serialized['option-id']
     );
+    case 'ClassPrerequisite': return new ClassPrerequisite(
+      serialized['class-id'],
+      serialized['level']
+    );
     case 'FeatPrerequisite': return new FeatPrerequisite(
       serialized['feat-id']
     );

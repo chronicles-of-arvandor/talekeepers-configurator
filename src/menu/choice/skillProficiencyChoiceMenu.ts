@@ -15,6 +15,7 @@ import {
 } from '../../models/prerequisites';
 import { displayPrerequisitesMenu } from '../prerequisite/prerequisitesMenu';
 import { getEffects, getEffectsDirectory, SkillProficiencyEffect } from '../../models/effects';
+import { displaySkillSelectionMenu } from '../skill/skillSelectionMenu';
 
 export function displayNewSkillProficiencyChoiceMenu(name: string, text: string, amount: number, prerequisites: Prerequisite[], skills: Skill[], rl: readline.Interface) {
   menu(
@@ -55,15 +56,16 @@ export function displayNewSkillProficiencyChoiceMenu(name: string, text: string,
       displayNewSkillProficiencyChoiceMenu(name, text, amount, prerequisites, Skill.values(), rl);
     }),
     option('Add skill', () => {
-      menu(
-        'Skill',
-        ...Skill.values().map((skill) => option(skill.name, () => {
-          displayNewSkillProficiencyChoiceMenu(name, text, amount, prerequisites, [...skills, skill], rl);
-        })),
-        option('Back to new skill proficiency choice menu', () => {
+      displaySkillSelectionMenu(
+        'Back to new skill proficiency choice menu',
+        () => {
           displayNewSkillProficiencyChoiceMenu(name, text, amount, prerequisites, skills, rl);
-        })
-      ).display(rl);
+        },
+        (skill) => {
+          displayNewSkillProficiencyChoiceMenu(name, text, amount, prerequisites, [...skills, skill], rl);
+        },
+        rl
+      );
     }),
     option('Remove skill', () => {
       menu(

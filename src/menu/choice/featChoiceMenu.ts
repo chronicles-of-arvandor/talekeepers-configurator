@@ -46,7 +46,9 @@ export function displayNewFeatChoiceMenu(name: string, text: string, amount: num
         () => {
           displayNewFeatChoiceMenu(name, text, amount, prerequisites, feats, rl);
         },
-        (newPrerequisites) => {},
+        (newPrerequisites) => {
+          displayNewFeatChoiceMenu(name, text, amount, newPrerequisites, feats, rl);
+        },
         rl
       );
     }),
@@ -88,8 +90,12 @@ export function displayNewFeatChoiceMenu(name: string, text: string, amount: num
 }
 
 function createFeatChoices(name: string, text: string, amount: number, prerequisites: Prerequisite[], feats: Feat[]) {
-  for (let i = 1; i <= amount; i++) {
-    createFeatChoice(`${name}_${i}`, `${text} (${i})`, prerequisites, feats);
+  if (amount > 1) {
+    for (let i = 1; i <= amount; i++) {
+      createFeatChoice(`${name}_${i}`, `${text} (${i})`, prerequisites, feats);
+    }
+  } else {
+    createFeatChoice(name, text, prerequisites, feats);
   }
 }
 

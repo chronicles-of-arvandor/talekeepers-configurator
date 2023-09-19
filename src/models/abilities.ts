@@ -28,6 +28,18 @@ export class Ability {
     }
   }
 
+  static getByDisplayName(displayName: string) {
+    switch (displayName) {
+      case 'Strength': return Ability.STRENGTH;
+      case 'Dexterity': return Ability.DEXTERITY;
+      case 'Constitution': return Ability.CONSTITUTION;
+      case 'Intelligence': return Ability.INTELLIGENCE;
+      case 'Wisdom': return Ability.WISDOM;
+      case 'Charisma': return Ability.CHARISMA;
+      default: throw new Error(`Unknown ability display name: ${displayName}`);
+    }
+  }
+
   static values() {
     return [
       Ability.STRENGTH,

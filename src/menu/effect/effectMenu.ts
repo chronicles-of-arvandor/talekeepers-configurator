@@ -56,6 +56,7 @@ function displayAbilityEffectMenu(effect: AbilityEffect, rl: readline.Interface)
         (prerequisites) => {
           effect.prerequisites = prerequisites;
           effect.save();
+          displayAbilityEffectMenu(effect, rl);
         },
         rl,
         effect.prerequisites
@@ -120,6 +121,7 @@ function displayCharacterTraitEffectMenu(effect: CharacterTraitEffect, rl: readl
         (prerequisites) => {
           effect.prerequisites = prerequisites;
           effect.save();
+          displayCharacterTraitEffectMenu(effect, rl);
         },
         rl,
         effect.prerequisites
@@ -180,6 +182,7 @@ function displayFeatEffectMenu(effect: FeatEffect, rl: readline.Interface) {
         (prerequisites) => {
           effect.prerequisites = prerequisites;
           effect.save();
+          displayFeatEffectMenu(effect, rl);
         },
         rl,
         effect.prerequisites
@@ -254,6 +257,7 @@ function displayItemProficiencyEffectMenu(effect: ItemProficiencyEffect, rl: rea
         (prerequisites) => {
           effect.prerequisites = prerequisites;
           effect.save();
+          displayItemProficiencyEffectMenu(effect, rl);
         },
         rl,
         effect.prerequisites
@@ -312,6 +316,7 @@ function displayLanguageEffectMenu(effect: LanguageEffect, rl: readline.Interfac
         (prerequisites) => {
           effect.prerequisites = prerequisites;
           effect.save();
+          displayLanguageEffectMenu(effect, rl);
         },
         rl,
         effect.prerequisites
@@ -370,6 +375,7 @@ function displaySavingThrowProficiencyEffectMenu(effect: SavingThrowProficiencyE
         (prerequisites) => {
           effect.prerequisites = prerequisites;
           effect.save();
+          displaySavingThrowProficiencyEffectMenu(effect, rl);
         },
         rl,
         effect.prerequisites
@@ -435,6 +441,7 @@ function displaySkillProficiencyEffectMenu(effect: SkillProficiencyEffect, rl: r
         (prerequisites) => {
           effect.prerequisites = prerequisites;
           effect.save();
+          displaySkillProficiencyEffectMenu(effect, rl);
         },
         rl,
         effect.prerequisites
@@ -510,6 +517,7 @@ function displaySpeedEffectMenu(effect: SpeedEffect, rl: readline.Interface) {
         (prerequisites) => {
           effect.prerequisites = prerequisites;
           effect.save();
+          displaySpeedEffectMenu(effect, rl);
         },
         rl,
         effect.prerequisites
@@ -539,6 +547,7 @@ function displaySpellEffectMenu(effect: SpellEffect, rl: readline.Interface) {
         (prerequisites) => {
           effect.prerequisites = prerequisites;
           effect.save();
+          displaySpellEffectMenu(effect, rl);
         },
         rl,
         effect.prerequisites

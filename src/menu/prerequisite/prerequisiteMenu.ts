@@ -17,7 +17,7 @@ import {
 } from '../../models/prerequisites';
 import * as readline from 'readline';
 import { menu, option } from '../menu';
-import { gray, red } from 'chalk';
+import { gray, green, red } from 'chalk';
 import { displayAbilitySelectionMenu } from '../ability/abilitySelectionMenu';
 import { displayAncestrySelectionMenu } from '../ancestry/ancestrySelectionMenu';
 import { getAncestryById } from '../../models/ancestries';
@@ -36,51 +36,50 @@ import { getSpellById, getSpellByName } from '../../models/spells';
 import { displaySubAncestrySelectionMenu } from '../ancestry/subancestry/subAncestrySelectionMenu';
 import { displaySubClassSelectionMenu } from '../clazz/subClassSelectionMenu';
 
-export function displayPrerequisiteMenu(prerequisite: Prerequisite, backAction: string, back: () => void, save: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
+export function displayPrerequisiteMenu(prerequisite: Prerequisite, backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
   if (AbilityPrerequisite.prototype.isPrototypeOf(prerequisite)) {
-    displayAbilityPrerequisiteMenu(prerequisite as AbilityPrerequisite, backAction, back, save, rl);
+    displayAbilityPrerequisiteMenu(prerequisite as AbilityPrerequisite, backAction, back, callback, rl);
   } else if (AncestryPrerequisite.prototype.isPrototypeOf(prerequisite)) {
-    displayAncestryPrerequisiteMenu(prerequisite as AncestryPrerequisite, backAction, back, save, rl);
+    displayAncestryPrerequisiteMenu(prerequisite as AncestryPrerequisite, backAction, back, callback, rl);
   } else if (AndPrerequisite.prototype.isPrototypeOf(prerequisite)) {
-    displayAndPrerequisiteMenu(prerequisite as AndPrerequisite, backAction, back, save, rl);
+    displayAndPrerequisiteMenu(prerequisite as AndPrerequisite, backAction, back, callback, rl);
   } else if (BackgroundPrerequisite.prototype.isPrototypeOf(prerequisite)) {
-    displayBackgroundPrerequisiteMenu(prerequisite as BackgroundPrerequisite, backAction, back, save, rl);
+    displayBackgroundPrerequisiteMenu(prerequisite as BackgroundPrerequisite, backAction, back, callback, rl);
   } else if (ChoicePrerequisite.prototype.isPrototypeOf(prerequisite)) {
-    displayChoicePrerequisiteMenu(prerequisite as ChoicePrerequisite, backAction, back, save, rl);
+    displayChoicePrerequisiteMenu(prerequisite as ChoicePrerequisite, backAction, back, callback, rl);
   } else if (ClassPrerequisite.prototype.isPrototypeOf(prerequisite)) {
-    displayClassPrerequisiteMenu(prerequisite as ClassPrerequisite, backAction, back, save, rl);
+    displayClassPrerequisiteMenu(prerequisite as ClassPrerequisite, backAction, back, callback, rl);
   } else if (FeatPrerequisite.prototype.isPrototypeOf(prerequisite)) {
-    displayFeatPrerequisiteMenu(prerequisite as FeatPrerequisite, backAction, back, save, rl);
+    displayFeatPrerequisiteMenu(prerequisite as FeatPrerequisite, backAction, back, callback, rl);
   } else if (ItemProficiencyPrerequisite.prototype.isPrototypeOf(prerequisite)) {
-    displayItemProficiencyPrerequisiteMenu(prerequisite as ItemProficiencyPrerequisite, backAction, back, save, rl);
+    displayItemProficiencyPrerequisiteMenu(prerequisite as ItemProficiencyPrerequisite, backAction, back, callback, rl);
   } else if (LanguagePrerequisite.prototype.isPrototypeOf(prerequisite)) {
-    displayLanguagePrerequisiteMenu(prerequisite as LanguagePrerequisite, backAction, back, save, rl);
+    displayLanguagePrerequisiteMenu(prerequisite as LanguagePrerequisite, backAction, back, callback, rl);
   } else if (LevelPrerequisite.prototype.isPrototypeOf(prerequisite)) {
-    displayLevelPrerequisiteMenu(prerequisite as LevelPrerequisite, backAction, back, save, rl);
+    displayLevelPrerequisiteMenu(prerequisite as LevelPrerequisite, backAction, back, callback, rl);
   } else if (SavingThrowProficiencyPrerequisite.prototype.isPrototypeOf(prerequisite)) {
-    displaySavingThrowProficiencyPrerequisiteMenu(prerequisite as SavingThrowProficiencyPrerequisite, backAction, back, save, rl);
+    displaySavingThrowProficiencyPrerequisiteMenu(prerequisite as SavingThrowProficiencyPrerequisite, backAction, back, callback, rl);
   } else if (SkillProficiencyPrerequisite.prototype.isPrototypeOf(prerequisite)) {
-    displaySkillProficiencyPrerequisiteMenu(prerequisite as SkillProficiencyPrerequisite, backAction, back, save, rl);
+    displaySkillProficiencyPrerequisiteMenu(prerequisite as SkillProficiencyPrerequisite, backAction, back, callback, rl);
   } else if (SpellPrerequisite.prototype.isPrototypeOf(prerequisite)) {
-    displaySpellPrerequisiteMenu(prerequisite as SpellPrerequisite, backAction, back, save, rl);
+    displaySpellPrerequisiteMenu(prerequisite as SpellPrerequisite, backAction, back, callback, rl);
   } else if (SubAncestryPrerequisite.prototype.isPrototypeOf(prerequisite)) {
-    displaySubAncestryPrerequisiteMenu(prerequisite as SubAncestryPrerequisite, backAction, back, save, rl);
+    displaySubAncestryPrerequisiteMenu(prerequisite as SubAncestryPrerequisite, backAction, back, callback, rl);
   } else if (SubClassPrerequisite.prototype.isPrototypeOf(prerequisite)) {
-    displaySubClassPrerequisiteMenu(prerequisite as SubClassPrerequisite, backAction, back, save, rl);
+    displaySubClassPrerequisiteMenu(prerequisite as SubClassPrerequisite, backAction, back, callback, rl);
   }
 }
 
-function displayAbilityPrerequisiteMenu(prerequisite: AbilityPrerequisite, backAction: string, back: () => void, save: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
+function displayAbilityPrerequisiteMenu(prerequisite: AbilityPrerequisite, backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
   menu(
     'Ability prerequisite',
     option('Ability ' + gray(`(${prerequisite.ability.displayName})`), () => {
       displayAbilitySelectionMenu(
         'Back to ability prerequisite',
-        () => displayAbilityPrerequisiteMenu(prerequisite, backAction, back, save, rl),
+        () => displayAbilityPrerequisiteMenu(prerequisite, backAction, back, callback, rl),
         (ability) => {
           prerequisite.ability = ability;
-          save(prerequisite);
-          displayAbilityPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+          displayAbilityPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
         },
         rl
       );
@@ -90,75 +89,84 @@ function displayAbilityPrerequisiteMenu(prerequisite: AbilityPrerequisite, backA
         let scoreInt = parseInt(score);
         if (!isNaN(scoreInt)) {
           prerequisite.score = scoreInt;
-          save(prerequisite);
         } else {
           console.log(red('Score must be an integer.'));
         }
-        displayAbilityPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+        displayAbilityPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
       });
+    }),
+    option(green('Save'), () => {
+      callback(prerequisite);
     }),
     option(backAction, back)
   ).display(rl);
 }
 
-function displayAncestryPrerequisiteMenu(prerequisite: AncestryPrerequisite, backAction: string, back: () => void, save: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
+function displayAncestryPrerequisiteMenu(prerequisite: AncestryPrerequisite, backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
   menu(
     'Ancestry prerequisite',
     option('Ancestry ' + gray(`(${getAncestryById(prerequisite.ancestryId)?.name ?? 'Unknown'})`), () => {
       displayAncestrySelectionMenu(
         'Back to ancestry prerequisite',
-        () => displayAncestryPrerequisiteMenu(prerequisite, backAction, back, save, rl),
+        () => displayAncestryPrerequisiteMenu(prerequisite, backAction, back, callback, rl),
         (ancestry) => {
           prerequisite.ancestryId = ancestry.id;
-          save(prerequisite);
-          displayAncestryPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+          displayAncestryPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
         },
         rl
       );
+    }),
+    option(green('Save'), () => {
+      callback(prerequisite);
     }),
     option(backAction, back)
   ).display(rl);
 }
 
-function displayAndPrerequisiteMenu(prerequisite: AndPrerequisite, backAction: string, back: () => void, save: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
+function displayAndPrerequisiteMenu(prerequisite: AndPrerequisite, backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
   menu(
     'AND prerequisite',
     option(
       'Prerequisites ' + gray(`(${prerequisite.prerequisites.length})`),
     () => displayPrerequisitesMenu(
         'Back to AND prerequisite',
-        () => displayAndPrerequisiteMenu(prerequisite, backAction, back, save, rl),
+        () => displayAndPrerequisiteMenu(prerequisite, backAction, back, callback, rl),
         (prerequisites) => {
           prerequisite.prerequisites = prerequisites;
-          save(prerequisite);
+          displayAndPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
         },
         rl
       )
     ),
-    option(backAction, back)
-  ).display(rl);
-}
-
-function displayBackgroundPrerequisiteMenu(prerequisite: BackgroundPrerequisite, backAction: string, back: () => void, save: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
-  menu(
-    'Background prerequisite',
-    option('Background ' + gray(`(${getBackgroundById(prerequisite.backgroundId)?.name ?? 'Unknown'})`), () => {
-      displayBackgroundSelectionMenu(
-        'Back to background prerequisite',
-        () => displayBackgroundPrerequisiteMenu(prerequisite, backAction, back, save, rl),
-        (background) => {
-          prerequisite.backgroundId = background.id;
-          save(prerequisite);
-          displayBackgroundPrerequisiteMenu(prerequisite, backAction, back, save, rl);
-        },
-        rl
-      );
+    option(green('Save'), () => {
+      callback(prerequisite);
     }),
     option(backAction, back)
   ).display(rl);
 }
 
-function displayChoicePrerequisiteMenu(prerequisite: ChoicePrerequisite, backAction: string, back: () => void, save: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
+function displayBackgroundPrerequisiteMenu(prerequisite: BackgroundPrerequisite, backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
+  menu(
+    'Background prerequisite',
+    option('Background ' + gray(`(${getBackgroundById(prerequisite.backgroundId)?.name ?? 'Unknown'})`), () => {
+      displayBackgroundSelectionMenu(
+        'Back to background prerequisite',
+        () => displayBackgroundPrerequisiteMenu(prerequisite, backAction, back, callback, rl),
+        (background) => {
+          prerequisite.backgroundId = background.id;
+          displayBackgroundPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
+        },
+        rl
+      );
+    }),
+    option(green('Save'), () => {
+      callback(prerequisite);
+    }),
+    option(backAction, back)
+  ).display(rl);
+}
+
+function displayChoicePrerequisiteMenu(prerequisite: ChoicePrerequisite, backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
   const choice = getChoiceById(prerequisite.choiceId);
   const opt = choice?.getOptionById(prerequisite.optionId);
   menu(
@@ -166,11 +174,10 @@ function displayChoicePrerequisiteMenu(prerequisite: ChoicePrerequisite, backAct
     option('Choice ' + gray(`(${choice?.text ?? 'Unknown'})`), () => {
       displayChoiceSelectionMenu(
         'Back to choice prerequisite',
-        () => displayChoicePrerequisiteMenu(prerequisite, backAction, back, save, rl),
+        () => displayChoicePrerequisiteMenu(prerequisite, backAction, back, callback, rl),
         (choice) => {
           prerequisite.choiceId = choice.id;
-          save(prerequisite);
-          displayChoicePrerequisiteMenu(prerequisite, backAction, back, save, rl);
+          displayChoicePrerequisiteMenu(prerequisite, backAction, back, callback, rl);
         },
         rl
       )
@@ -178,37 +185,38 @@ function displayChoicePrerequisiteMenu(prerequisite: ChoicePrerequisite, backAct
     option('Option ' + gray(`(${opt?.text})`), () => {
       if (!choice) {
         console.log(red('Choice not found.'));
-        displayChoicePrerequisiteMenu(prerequisite, backAction, back, save, rl);
+        displayChoicePrerequisiteMenu(prerequisite, backAction, back, callback, rl);
         return;
       }
       displayOptionSelectionMenu(
         choice,
         'Back to choice prerequisite',
-        () => displayChoicePrerequisiteMenu(prerequisite, backAction, back, save, rl),
+        () => displayChoicePrerequisiteMenu(prerequisite, backAction, back, callback, rl),
         (option) => {
           prerequisite.optionId = option.id;
-          save(prerequisite);
-          displayChoicePrerequisiteMenu(prerequisite, backAction, back, save, rl);
+          displayChoicePrerequisiteMenu(prerequisite, backAction, back, callback, rl);
         },
         rl
       )
+    }),
+    option(green('Save'), () => {
+      callback(prerequisite);
     }),
     option(backAction, back)
   ).display(rl);
 }
 
-function displayClassPrerequisiteMenu(prerequisite: ClassPrerequisite, backAction: string, back: () => void, save: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
+function displayClassPrerequisiteMenu(prerequisite: ClassPrerequisite, backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
   const clazz = getClassById(prerequisite.classId);
   menu(
     'Class prerequisite',
     option('Class ' + gray(`(${clazz?.name ?? 'Unknown'})`), () => {
       displayClassSelectionMenu(
         'Back to class prerequisite',
-        () => displayClassPrerequisiteMenu(prerequisite, backAction, back, save, rl),
+        () => displayClassPrerequisiteMenu(prerequisite, backAction, back, callback, rl),
         (clazz) => {
           prerequisite.classId = clazz.id;
-          save(prerequisite);
-          displayClassPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+          displayClassPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
         },
         rl
       );
@@ -218,18 +226,20 @@ function displayClassPrerequisiteMenu(prerequisite: ClassPrerequisite, backActio
         let levelInt = parseInt(level);
         if (!isNaN(levelInt)) {
           prerequisite.level = levelInt;
-          save(prerequisite);
         } else {
           console.log(red('Level must be an integer.'));
         }
-        displayClassPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+        displayClassPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
       });
+    }),
+    option(green('Save'), () => {
+      callback(prerequisite);
     }),
     option(backAction, back)
   ).display(rl);
 }
 
-function displayFeatPrerequisiteMenu(prerequisite: FeatPrerequisite, backAction: string, back: () => void, save: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
+function displayFeatPrerequisiteMenu(prerequisite: FeatPrerequisite, backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
   const feat = getFeatById(prerequisite.featId);
   menu(
     'Feat prerequisite',
@@ -241,38 +251,41 @@ function displayFeatPrerequisiteMenu(prerequisite: FeatPrerequisite, backAction:
           return;
         } else {
           prerequisite.featId = feat.id;
-          save(prerequisite);
         }
-        displayFeatPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+        displayFeatPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
       });
+    }),
+    option(green('Save'), () => {
+      callback(prerequisite);
     }),
     option(backAction, back)
   ).display(rl);
 }
 
-function displayItemProficiencyPrerequisiteMenu(prerequisite: ItemProficiencyPrerequisite, backAction: string, back: () => void, save: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
+function displayItemProficiencyPrerequisiteMenu(prerequisite: ItemProficiencyPrerequisite, backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
   menu(
     'Item proficiency prerequisite\n' +
     gray(prerequisite.itemIds.join(", ")),
     option('Add item', () => {
       rl.question('Item ID: ', (itemId) => {
         prerequisite.itemIds.push(itemId);
-        save(prerequisite);
-        displayItemProficiencyPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+        displayItemProficiencyPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
       });
     }),
     option('Remove item', () => {
       rl.question('Item ID: ', (itemId) => {
         prerequisite.itemIds = prerequisite.itemIds.filter((id) => id !== itemId);
-        save(prerequisite);
-        displayItemProficiencyPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+        displayItemProficiencyPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
       });
+    }),
+    option(green('Save'), () => {
+      callback(prerequisite);
     }),
     option(backAction, back)
   ).display(rl);
 }
 
-function displayLanguagePrerequisiteMenu(prerequisite: LanguagePrerequisite, backAction: string, back: () => void, save: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
+function displayLanguagePrerequisiteMenu(prerequisite: LanguagePrerequisite, backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
   const language = getLanguageById(prerequisite.languageId);
   menu(
     'Language prerequisite',
@@ -281,19 +294,21 @@ function displayLanguagePrerequisiteMenu(prerequisite: LanguagePrerequisite, bac
         const language = getLanguageByName(languageName);
         if (!language) {
           console.log(red('Language not found.'));
-          displayLanguagePrerequisiteMenu(prerequisite, backAction, back, save, rl);
+          displayLanguagePrerequisiteMenu(prerequisite, backAction, back, callback, rl);
           return;
         }
         prerequisite.languageId = language.id;
-        save(prerequisite);
-        displayLanguagePrerequisiteMenu(prerequisite, backAction, back, save, rl);
+        displayLanguagePrerequisiteMenu(prerequisite, backAction, back, callback, rl);
       });
+    }),
+    option(green('Save'), () => {
+      callback(prerequisite);
     }),
     option(backAction, back)
   ).display(rl);
 }
 
-function displayLevelPrerequisiteMenu(prerequisite: LevelPrerequisite, backAction: string, back: () => void, save: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
+function displayLevelPrerequisiteMenu(prerequisite: LevelPrerequisite, backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
   menu(
     'Level prerequisite',
     option('Level ' + gray(`(${prerequisite.level})`), () => {
@@ -301,29 +316,30 @@ function displayLevelPrerequisiteMenu(prerequisite: LevelPrerequisite, backActio
         let levelInt = parseInt(level);
         if (!isNaN(levelInt)) {
           prerequisite.level = levelInt;
-          save(prerequisite);
         } else {
           console.log(red('Level must be an integer.'));
         }
-        displayLevelPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+        displayLevelPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
       });
+    }),
+    option(green('Save'), () => {
+      callback(prerequisite);
     }),
     option(backAction, back)
   ).display(rl);
 }
 
-function displaySavingThrowProficiencyPrerequisiteMenu(prerequisite: SavingThrowProficiencyPrerequisite, backAction: string, back: () => void, save: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
+function displaySavingThrowProficiencyPrerequisiteMenu(prerequisite: SavingThrowProficiencyPrerequisite, backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
   menu(
     'Saving throw proficiency prerequisite\n' +
     gray(prerequisite.abilities.map((ability) => ability.displayName).join(", ")),
     option('Add ability', () => {
       displayAbilitySelectionMenu(
         'Back to saving throw proficiency prerequisite',
-        () => displaySavingThrowProficiencyPrerequisiteMenu(prerequisite, backAction, back, save, rl),
+        () => displaySavingThrowProficiencyPrerequisiteMenu(prerequisite, backAction, back, callback, rl),
         (ability) => {
           prerequisite.abilities.push(ability);
-          save(prerequisite);
-          displaySavingThrowProficiencyPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+          displaySavingThrowProficiencyPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
         },
         rl
       );
@@ -331,31 +347,32 @@ function displaySavingThrowProficiencyPrerequisiteMenu(prerequisite: SavingThrow
     option('Remove ability', () => {
       displayAbilitySelectionMenu(
         'Back to saving throw proficiency prerequisite',
-        () => displaySavingThrowProficiencyPrerequisiteMenu(prerequisite, backAction, back, save, rl),
+        () => displaySavingThrowProficiencyPrerequisiteMenu(prerequisite, backAction, back, callback, rl),
         (ability) => {
           prerequisite.abilities = prerequisite.abilities.filter((a) => a !== ability);
-          save(prerequisite);
-          displaySavingThrowProficiencyPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+          displaySavingThrowProficiencyPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
         },
         rl
       );
+    }),
+    option(green('Save'), () => {
+      callback(prerequisite);
     }),
     option(backAction, back)
   ).display(rl);
 }
 
-function displaySkillProficiencyPrerequisiteMenu(prerequisite: SkillProficiencyPrerequisite, backAction: string, back: () => void, save: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
+function displaySkillProficiencyPrerequisiteMenu(prerequisite: SkillProficiencyPrerequisite, backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
   menu(
     'Skill proficiency prerequisite\n' +
     gray(prerequisite.skills.map((skill) => skill.displayName).join(", ")),
     option('Add skill', () => {
       displaySkillSelectionMenu(
         'Back to skill proficiency prerequisite',
-        () => displaySkillProficiencyPrerequisiteMenu(prerequisite, backAction, back, save, rl),
+        () => displaySkillProficiencyPrerequisiteMenu(prerequisite, backAction, back, callback, rl),
         (skill) => {
           prerequisite.skills.push(skill);
-          save(prerequisite);
-          displaySkillProficiencyPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+          displaySkillProficiencyPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
         },
         rl
       );
@@ -363,20 +380,22 @@ function displaySkillProficiencyPrerequisiteMenu(prerequisite: SkillProficiencyP
     option('Remove skill', () => {
       displaySkillSelectionMenu(
         'Back to skill proficiency prerequisite',
-        () => displaySkillProficiencyPrerequisiteMenu(prerequisite, backAction, back, save, rl),
+        () => displaySkillProficiencyPrerequisiteMenu(prerequisite, backAction, back, callback, rl),
         (skill) => {
           prerequisite.skills = prerequisite.skills.filter((s) => s !== skill);
-          save(prerequisite);
-          displaySkillProficiencyPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+          displaySkillProficiencyPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
         },
         rl
       );
+    }),
+    option(green('Save'), () => {
+      callback(prerequisite);
     }),
     option(backAction, back)
   ).display(rl);
 }
 
-function displaySpellPrerequisiteMenu(prerequisite: SpellPrerequisite, backAction: string, back: () => void, save: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
+function displaySpellPrerequisiteMenu(prerequisite: SpellPrerequisite, backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
   const spells = prerequisite.spellIds.map((id) => getSpellById(id));
   menu(
     'Spell prerequisite\n' +
@@ -386,12 +405,11 @@ function displaySpellPrerequisiteMenu(prerequisite: SpellPrerequisite, backActio
         const spell = getSpellByName(spellName);
         if (!spell) {
           console.log(red('Spell not found.'));
-          displaySpellPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+          displaySpellPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
           return;
         }
         prerequisite.spellIds.push(spell.id);
-        save(prerequisite);
-        displaySpellPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+        displaySpellPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
       });
     }),
     option('Remove spell', () => {
@@ -399,19 +417,21 @@ function displaySpellPrerequisiteMenu(prerequisite: SpellPrerequisite, backActio
         const spell = getSpellByName(spellName);
         if (!spell) {
           console.log(red('Spell not found.'));
-          displaySpellPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+          displaySpellPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
           return;
         }
         prerequisite.spellIds = prerequisite.spellIds.filter((id) => id !== spell.id);
-        save(prerequisite);
-        displaySpellPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+        displaySpellPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
       });
+    }),
+    option(green('Save'), () => {
+      callback(prerequisite);
     }),
     option(backAction, back)
   ).display(rl);
 }
 
-function displaySubAncestryPrerequisiteMenu(prerequisite: SubAncestryPrerequisite, backAction: string, back: () => void, save: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
+function displaySubAncestryPrerequisiteMenu(prerequisite: SubAncestryPrerequisite, backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
   const ancestry = getAncestryById(prerequisite.ancestryId);
   const subAncestry = ancestry?.getSubAncestryById(prerequisite.subAncestryId);
   menu(
@@ -419,11 +439,10 @@ function displaySubAncestryPrerequisiteMenu(prerequisite: SubAncestryPrerequisit
     option('Ancestry ' + gray(`(${ancestry?.name ?? 'Unknown'})`), () => {
       displayAncestrySelectionMenu(
         'Back to sub-ancestry prerequisite',
-        () => displaySubAncestryPrerequisiteMenu(prerequisite, backAction, back, save, rl),
+        () => displaySubAncestryPrerequisiteMenu(prerequisite, backAction, back, callback, rl),
         (ancestry) => {
           prerequisite.ancestryId = ancestry.id;
-          save(prerequisite);
-          displaySubAncestryPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+          displaySubAncestryPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
         },
         rl
       );
@@ -431,17 +450,16 @@ function displaySubAncestryPrerequisiteMenu(prerequisite: SubAncestryPrerequisit
     option('Sub-ancestry ' + gray(`(${subAncestry?.name ?? 'Unknown'})`), () => {
       if (!ancestry) {
         console.log(red('Ancestry not found.'));
-        displaySubAncestryPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+        displaySubAncestryPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
         return;
       }
       displaySubAncestrySelectionMenu(
         ancestry,
         'Back to sub-ancestry prerequisite',
-        () => displaySubAncestryPrerequisiteMenu(prerequisite, backAction, back, save, rl),
+        () => displaySubAncestryPrerequisiteMenu(prerequisite, backAction, back, callback, rl),
         (subAncestry) => {
           prerequisite.subAncestryId = subAncestry.id;
-          save(prerequisite);
-          displaySubAncestryPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+          displaySubAncestryPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
         },
         rl
       );
@@ -450,7 +468,7 @@ function displaySubAncestryPrerequisiteMenu(prerequisite: SubAncestryPrerequisit
   ).display(rl);
 }
 
-function displaySubClassPrerequisiteMenu(prerequisite: SubClassPrerequisite, backAction: string, back: () => void, save: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
+function displaySubClassPrerequisiteMenu(prerequisite: SubClassPrerequisite, backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
   const clazz = getClassById(prerequisite.classId);
   const subClass = clazz?.getSubClassById(prerequisite.subClassId);
   const level = prerequisite.level;
@@ -459,11 +477,10 @@ function displaySubClassPrerequisiteMenu(prerequisite: SubClassPrerequisite, bac
     option('Class ' + gray(`(${clazz?.name ?? 'Unknown'})`), () => {
       displayClassSelectionMenu(
         'Back to sub-class prerequisite',
-        () => displaySubClassPrerequisiteMenu(prerequisite, backAction, back, save, rl),
+        () => displaySubClassPrerequisiteMenu(prerequisite, backAction, back, callback, rl),
         (clazz) => {
           prerequisite.classId = clazz.id;
-          save(prerequisite);
-          displaySubClassPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+          displaySubClassPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
         },
         rl
       );
@@ -471,17 +488,16 @@ function displaySubClassPrerequisiteMenu(prerequisite: SubClassPrerequisite, bac
     option('Sub-class ' + gray(`(${subClass?.name ?? 'Unknown'})`), () => {
       if (!clazz) {
         console.log(red('Class not found.'));
-        displaySubClassPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+        displaySubClassPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
         return;
       }
       displaySubClassSelectionMenu(
         clazz,
         'Back to sub-class prerequisite',
-        () => displaySubClassPrerequisiteMenu(prerequisite, backAction, back, save, rl),
+        () => displaySubClassPrerequisiteMenu(prerequisite, backAction, back, callback, rl),
         (subClass) => {
           prerequisite.subClassId = subClass.id;
-          save(prerequisite);
-          displaySubClassPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+          displaySubClassPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
         },
         rl
       );
@@ -491,12 +507,14 @@ function displaySubClassPrerequisiteMenu(prerequisite: SubClassPrerequisite, bac
         let levelInt = parseInt(level);
         if (!isNaN(levelInt)) {
           prerequisite.level = levelInt;
-          save(prerequisite);
         } else {
           console.log(red('Level must be an integer.'));
         }
-        displaySubClassPrerequisiteMenu(prerequisite, backAction, back, save, rl);
+        displaySubClassPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
       });
+    }),
+    option(green('Save'), () => {
+      callback(prerequisite);
     }),
     option(backAction, back)
   ).display(rl);

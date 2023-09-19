@@ -26,6 +26,7 @@ export function displayChoiceOptionsMenu(choice: Choice, rl: readline.Interface)
             choice.options.push(opt);
           }
           choice.save();
+          displayChoiceOptionsMenu(choice, rl);
         },
         () => {
           choice.options.slice(choice.options.indexOf(opt), 1);
@@ -45,6 +46,7 @@ export function displayChoiceOptionsMenu(choice: Choice, rl: readline.Interface)
               choice.options.push(opt);
             }
             choice.save();
+            displayChoiceOptionsMenu(choice, rl);
           },
           () => {
             choice.options.slice(choice.options.indexOf(opt), 1);

@@ -6,6 +6,7 @@ import { getChoiceById } from './choices';
 import { Skill } from './skills';
 import { getClassById } from './classes';
 import { getSpellById } from './spells';
+import { getFeatById } from './feats';
 
 export interface Prerequisite extends ConfigurationSerializable {
   getName(): string;
@@ -147,7 +148,8 @@ export class FeatPrerequisite implements Prerequisite {
   }
 
   getName() {
-    return `Feat: ${this.featId}`;
+    const feat = getFeatById(this.featId);
+    return `Feat: ${feat?.name ?? 'Unknown'}`;
   }
 
   serialize(): { [key: string]: any } {

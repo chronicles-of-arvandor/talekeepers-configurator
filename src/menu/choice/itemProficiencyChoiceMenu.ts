@@ -45,7 +45,9 @@ export function displayNewItemProficiencyChoiceMenu(name: string, text: string, 
         () => {
           displayNewItemProficiencyChoiceMenu(name, text, amount, prerequisites, items, rl);
         },
-        (newPrerequisites) => {},
+        (newPrerequisites) => {
+          displayNewItemProficiencyChoiceMenu(name, text, amount, newPrerequisites, items, rl);
+        },
         rl
       );
     }),
@@ -73,8 +75,12 @@ export function displayNewItemProficiencyChoiceMenu(name: string, text: string, 
 }
 
 function createItemProficiencyChoices(name: string, text: string, amount: number, prerequisites: Prerequisite[], items: string[]) {
-  for (let i = 1; i <= amount; i++) {
-    createItemProficiencyChoice(`${name}_${i}`, `${text} (${i})`, prerequisites, items);
+  if (amount > 1) {
+    for (let i = 1; i <= amount; i++) {
+      createItemProficiencyChoice(`${name}_${i}`, `${text} (${i})`, prerequisites, items);
+    }
+  } else {
+    createItemProficiencyChoice(name, text, prerequisites, items);
   }
 }
 

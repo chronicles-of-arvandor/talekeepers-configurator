@@ -26,7 +26,7 @@ import { displayPrerequisiteMenu } from './prerequisiteMenu';
 export function displayPrerequisitesMenu(
   backAction: string,
   back: () => void,
-  save: (prerequisites: Prerequisite[]) => void,
+  callback: (prerequisites: Prerequisite[]) => void,
   rl: readline.Interface,
   prerequisites: Prerequisite[] = []
 ) {
@@ -36,13 +36,19 @@ export function displayPrerequisitesMenu(
       displayNewPrerequisiteMenu(
         'Back to prerequisites menu',
         () => {
-          displayPrerequisitesMenu(backAction, back, save, rl, prerequisites);
+          displayPrerequisitesMenu(backAction, back, callback, rl, prerequisites);
         },
         (prerequisite) => {
           if (prerequisites.indexOf(prerequisite) === -1) {
             prerequisites.push(prerequisite);
           }
-          save(prerequisites);
+          displayPrerequisitesMenu(
+            backAction,
+            back,
+            callback,
+            rl,
+            prerequisites
+          );
         },
         rl
       );
@@ -54,82 +60,88 @@ export function displayPrerequisitesMenu(
           prerequisite,
           'Back to prerequisites menu',
           () => {
-            displayPrerequisitesMenu(backAction, back, save, rl, prerequisites);
+            displayPrerequisitesMenu(backAction, back, callback, rl, prerequisites);
           },
           (prerequisite) => {
             if (prerequisites.indexOf(prerequisite) === -1) {
               prerequisites.push(prerequisite);
             }
-            save(prerequisites);
+            displayPrerequisitesMenu(
+              backAction,
+              back,
+              callback,
+              rl,
+              prerequisites
+            );
           },
           rl
         )
       }
     )),
+    option(green('Save'), () => {
+      callback(prerequisites);
+    }),
     option(backAction, back)
   ).display(rl);
 }
 
-function displayNewPrerequisiteMenu(backAction: string, back: () => void, save: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
+function displayNewPrerequisiteMenu(backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
   menu(
     'Prerequisite type',
     option('AND', () => {
       const andPrerequisite = new AndPrerequisite([]);
-      save(andPrerequisite);
       displayPrerequisiteMenu(
         andPrerequisite,
         'Back to new prerequisite menu',
-        () => displayNewPrerequisiteMenu(backAction, back, save, rl),
-        save,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
+        callback,
         rl);
     }),
     option('OR', () => {
       const orPrerequisite = new OrPrerequisite([]);
-      save(orPrerequisite);
       displayPrerequisiteMenu(
         orPrerequisite,
         'Back to new prerequisite menu',
-        () => displayNewPrerequisiteMenu(backAction, back, save, rl),
-        save,
-        rl);
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
+        callback,
+        rl
+      );
     }),
     option('NOT', () => {
       const notPrerequisite = new NotPrerequisite(new AndPrerequisite([]));
-      save(notPrerequisite);
       displayPrerequisiteMenu(
         notPrerequisite,
         'Back to new prerequisite menu',
-        () => displayNewPrerequisiteMenu(backAction, back, save, rl),
-        save,
-        rl);
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
+        callback,
+        rl
+      );
     }),
     option('Ability score', () => {
       const abilityPrerequisite = new AbilityPrerequisite(
         Ability.STRENGTH,
         10
       );
-      save(abilityPrerequisite);
       displayPrerequisiteMenu(
         abilityPrerequisite,
         'Back to new prerequisite menu',
-        () => displayNewPrerequisiteMenu(backAction, back, save, rl),
-        save,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
+        callback,
         rl);
     }),
     option('Ancestry', () => {
       const ancestries = getAncestries();
       if (ancestries.length === 0) {
         console.log(red('No ancestries defined yet.'));
-        displayNewPrerequisiteMenu(backAction, back, save, rl);
+        displayNewPrerequisiteMenu(backAction, back, callback, rl);
         return;
       }
       const ancestryPrerequisite = new AncestryPrerequisite(ancestries[0].id);
-      save(ancestryPrerequisite);
       displayPrerequisiteMenu(
         ancestryPrerequisite,
         'Back to new prerequisite menu',
-        () => displayNewPrerequisiteMenu(backAction, back, save, rl),
-        save,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
+        callback,
         rl
       );
     }),
@@ -137,177 +149,174 @@ function displayNewPrerequisiteMenu(backAction: string, back: () => void, save: 
       const backgrounds = getBackgrounds();
       if (backgrounds.length === 0) {
         console.log(red('No backgrounds defined yet.'));
-        displayNewPrerequisiteMenu(backAction, back, save, rl);
+        displayNewPrerequisiteMenu(backAction, back, callback, rl);
         return;
       }
       const backgroundPrerequisite = new AncestryPrerequisite(backgrounds[0].id);
-      save(backgroundPrerequisite);
+      displayPrerequisiteMenu(
+        backgroundPrerequisite,
+        'Back to new prerequisite menu',
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
+        callback,
+        rl
+      )
     }),
     option('Choice', () => {
       const choices = getChoices();
       if (choices.length === 0) {
         console.log(red('No choices defined yet.'));
-        displayNewPrerequisiteMenu(backAction, back, save, rl);
+        displayNewPrerequisiteMenu(backAction, back, callback, rl);
         return;
       }
       const choice = choices.find((choice) => choice.options.length > 0);
       if (!choice) {
         console.log(red('No choices with options defined yet.'));
-        displayNewPrerequisiteMenu(backAction, back, save, rl);
+        displayNewPrerequisiteMenu(backAction, back, callback, rl);
         return;
       }
       const option = choice.options[0];
       const choicePrerequisite = new ChoicePrerequisite(choice.id, option.id);
-      save(choicePrerequisite);
       displayPrerequisiteMenu(
         choicePrerequisite,
         'Back to new prerequisite menu',
-        () => displayNewPrerequisiteMenu(backAction, back, save, rl),
-        save,
-        rl);
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
+        callback,
+        rl
+      );
     }),
     option('Class', () => {
       const classes = getClasses();
       if (classes.length === 0) {
         console.log(red('No classes defined yet.'));
-        displayNewPrerequisiteMenu(backAction, back, save, rl);
+        displayNewPrerequisiteMenu(backAction, back, callback, rl);
         return;
       }
       const classPrerequisite = new ClassPrerequisite(classes[0].id, 1);
-      save(classPrerequisite);
       displayPrerequisiteMenu(
         classPrerequisite,
         'Back to new prerequisite menu',
-        () => displayNewPrerequisiteMenu(backAction, back, save, rl),
-        save,
-        rl);
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
+        callback,
+        rl
+      );
     }),
     option('Feat', () => {
       const feats = getFeats();
       if (feats.length === 0) {
         console.log(red('No feats defined yet.'));
-        displayNewPrerequisiteMenu(backAction, back, save, rl);
+        displayNewPrerequisiteMenu(backAction, back, callback, rl);
         return;
       }
       const featPrerequisite = new FeatPrerequisite(feats[0].id);
-      save(featPrerequisite);
       displayPrerequisiteMenu(
         featPrerequisite,
         'Back to new prerequisite menu',
-        () => displayNewPrerequisiteMenu(backAction, back, save, rl),
-        save,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
+        callback,
         rl);
     }),
     option('Item proficiency', () => {
       const itemProficiencyPrerequisite = new ItemProficiencyPrerequisite([]);
-      save(itemProficiencyPrerequisite);
       displayPrerequisiteMenu(
         itemProficiencyPrerequisite,
         'Back to new prerequisite menu',
-        () => displayNewPrerequisiteMenu(backAction, back, save, rl),
-        save,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
+        callback,
         rl);
     }),
     option('Language', () => {
       const languages = getLanguages();
       if (languages.length === 0) {
         console.log(red('No languages defined yet.'));
-        displayNewPrerequisiteMenu(backAction, back, save, rl);
+        displayNewPrerequisiteMenu(backAction, back, callback, rl);
         return;
       }
       const languagePrerequisite = new LanguagePrerequisite(languages[0].id);
-      save(languagePrerequisite);
       displayPrerequisiteMenu(
         languagePrerequisite,
         'Back to new prerequisite menu',
-        () => displayNewPrerequisiteMenu(backAction, back, save, rl),
-        save,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
+        callback,
         rl);
     }),
     option('Level', () => {
       const levelPrerequisite = new LevelPrerequisite(1);
-      save(levelPrerequisite);
       displayPrerequisiteMenu(
         levelPrerequisite,
         'Back to new prerequisite menu',
-        () => displayNewPrerequisiteMenu(backAction, back, save, rl),
-        save,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
+        callback,
         rl);
     }),
     option('Saving throw proficiency', () => {
       const savingThrowProficiencyPrerequisite = new SavingThrowProficiencyPrerequisite([]);
-      save(savingThrowProficiencyPrerequisite);
       displayPrerequisiteMenu(
         savingThrowProficiencyPrerequisite,
         'Back to new prerequisite menu',
-        () => displayNewPrerequisiteMenu(backAction, back, save, rl),
-        save,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
+        callback,
         rl);
     }),
     option('Skill proficiency', () => {
       const skillProficiencyPrerequisite = new SkillProficiencyPrerequisite([]);
-      save(skillProficiencyPrerequisite);
       displayPrerequisiteMenu(
         skillProficiencyPrerequisite,
         'Back to new prerequisite menu',
-        () => displayNewPrerequisiteMenu(backAction, back, save, rl),
-        save,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
+        callback,
         rl);
     }),
     option('Spell', () => {
       const spellPrerequisite = new SpellPrerequisite([]);
-      save(spellPrerequisite);
       displayPrerequisiteMenu(
         spellPrerequisite,
         'Back to new prerequisite menu',
-        () => displayNewPrerequisiteMenu(backAction, back, save, rl),
-        save,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
+        callback,
         rl);
     }),
     option('Sub-ancestry', () => {
       const ancestries = getAncestries();
       if (ancestries.length === 0) {
         console.log(red('No ancestries defined yet.'));
-        displayNewPrerequisiteMenu(backAction, back, save, rl);
+        displayNewPrerequisiteMenu(backAction, back, callback, rl);
         return;
       }
       const ancestry = ancestries.find((ancestry) => ancestry.subAncestries.length > 0);
       if (!ancestry) {
         console.log(red('No ancestries with sub-ancestries defined yet.'));
-        displayNewPrerequisiteMenu(backAction, back, save, rl);
+        displayNewPrerequisiteMenu(backAction, back, callback, rl);
         return;
       }
       const subAncestry = ancestry.subAncestries[0];
       const subAncestryPrerequisite = new SubAncestryPrerequisite(ancestry.id, subAncestry.id);
-      save(subAncestryPrerequisite);
       displayPrerequisiteMenu(
         subAncestryPrerequisite,
         'Back to new prerequisite menu',
-        () => displayNewPrerequisiteMenu(backAction, back, save, rl),
-        save,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
+        callback,
         rl);
     }),
     option('Sub-class', () => {
       const classes = getClasses();
       if (classes.length === 0) {
         console.log(red('No classes defined yet.'));
-        displayNewPrerequisiteMenu(backAction, back, save, rl);
+        displayNewPrerequisiteMenu(backAction, back, callback, rl);
         return;
       }
       const clazz = classes.find((clazz) => clazz.subClasses.length > 0);
       if (!clazz) {
         console.log(red('No classes with sub-classes defined yet.'));
-        displayNewPrerequisiteMenu(backAction, back, save, rl);
+        displayNewPrerequisiteMenu(backAction, back, callback, rl);
         return;
       }
       const subClass = clazz.subClasses[0];
       const subClassPrerequisite = new SubAncestryPrerequisite(clazz.id, subClass.id);
-      save(subClassPrerequisite);
       displayPrerequisiteMenu(
         subClassPrerequisite,
         'Back to new prerequisite menu',
-        () => displayNewPrerequisiteMenu(backAction, back, save, rl),
-        save,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
+        callback,
         rl);
     }),
     option(backAction, () => {

@@ -47,7 +47,9 @@ export function displayNewSkillProficiencyChoiceMenu(name: string, text: string,
         () => {
           displayNewSkillProficiencyChoiceMenu(name, text, amount, prerequisites, skills, rl);
         },
-        (newPrerequisites) => {},
+        (newPrerequisites) => {
+          displayNewSkillProficiencyChoiceMenu(name, text, amount, newPrerequisites, skills, rl);
+        },
         rl
       );
     }),
@@ -90,8 +92,12 @@ export function displayNewSkillProficiencyChoiceMenu(name: string, text: string,
 }
 
 function createSkillProficiencyChoices(name: string, text: string, amount: number, prerequisites: Prerequisite[], skills: Skill[]) {
-  for (let i = 1; i <= amount; i++) {
-    createSkillProficiencyChoice(`${name}_${i}`, `${text} (${i})`, prerequisites, skills);
+  if (amount > 1) {
+    for (let i = 1; i <= amount; i++) {
+      createSkillProficiencyChoice(`${name}_${i}`, `${text} (${i})`, prerequisites, skills);
+    }
+  } else {
+    createSkillProficiencyChoice(name, text, prerequisites, skills);
   }
 }
 

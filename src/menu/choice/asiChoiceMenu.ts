@@ -1,9 +1,14 @@
 import * as readline from 'readline';
-import { Prerequisite } from '../../models/prerequisites';
+import { AbilityPrerequisite, ChoicePrerequisite, NotPrerequisite, Prerequisite } from '../../models/prerequisites';
 import { menu, option } from '../menu';
 import { gray, green, red } from 'chalk';
 import { displayChoicesMenu } from './choicesMenu';
 import { displayPrerequisitesMenu } from '../prerequisite/prerequisitesMenu';
+import { Choice, ChoiceOption, getChoicesDirectory } from '../../models/choices';
+import path from 'path';
+import { Ability } from '../../models/abilities';
+import * as uuid from 'uuid';
+import { AbilityEffect, getEffectsDirectory } from '../../models/effects';
 
 export function displayNewAsiChoiceMenu(name: string, text: string, amount: number, prerequisites: Prerequisite[], rl: readline.Interface) {
   menu(
@@ -37,12 +42,73 @@ export function displayNewAsiChoiceMenu(name: string, text: string, amount: numb
         'Back to new ASI choice menu', () => {
           displayNewAsiChoiceMenu(name, text, amount, prerequisites, rl);
         },
-        (newPrerequisites) => {},
+        (newPrerequisites) => {
+          displayNewAsiChoiceMenu(name, text, amount, newPrerequisites, rl);
+        },
         rl
       );
+    }),
+    option(green('Save'), () => {
+      createAsiChoices(name, text, amount, prerequisites);
+      console.log(green('ASI choices saved.'));
+      displayChoicesMenu(rl);
     }),
     option('Back to choices menu', () => {
       displayChoicesMenu(rl);
     })
-  )
+  ).display(rl);
+}
+
+function createAsiChoices(name: string, text: string, amount: number, prerequisites: Prerequisite[]) {
+  if (amount > 1) {
+    for (let i = 1; i <= amount; i++) {
+      createAsiChoice(`${name}_${i}`, `${text} (${i})`, prerequisites);
+    }
+  } else {
+    createAsiChoice(name, text, prerequisites);
+  }
+}
+
+function createAsiChoice(name: string, text: string, prerequisites: Prerequisite[]) {
+  const choice = new Choice(
+    path.join(getChoicesDirectory(), `${name}.yml`),
+    uuid.v4(),
+    text,
+    prerequisites,
+    Ability.values().map((ability) => {
+      return new ChoiceOption(
+        uuid.v4(),
+        ability.displayName,
+        [
+          new NotPrerequisite(
+            new AbilityPrerequisite(
+              ability,
+              20
+            )
+          )
+        ]
+      );
+    })
+  );
+  choice.save();
+  updateEffects(choice, name);
+}
+
+function updateEffects(choice: Choice, name: string) {
+  choice.options.forEach((option) => {
+    const ability = Ability.getByDisplayName(option.text);
+    const effect = new AbilityEffect(
+      path.join(getEffectsDirectory(), `${name}_${ability.shortName.toLowerCase()}.yml`),
+      {
+        [ability.name]: 1
+      },
+      [
+        new ChoicePrerequisite(
+          choice.id,
+          option.id
+        )
+      ]
+    );
+    effect.save();
+  });
 }

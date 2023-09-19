@@ -58,7 +58,9 @@ export function displayNewSpellChoiceMenu(name: string, text: string, amount: nu
         () => {
           displayNewSpellChoiceMenu(name, text, amount, prerequisites, spells, rl);
         },
-        (newPrerequisites) => {},
+        (newPrerequisites) => {
+          displayNewSpellChoiceMenu(name, text, amount, newPrerequisites, spells, rl);
+        },
         rl
       );
     }),
@@ -183,8 +185,12 @@ function addSpellList(name: string, text: string, amount: number, prerequisites:
 }
 
 function createSpellChoices(name: string, text: string, amount: number, prerequisites: Prerequisite[], spells: Spell[]) {
-  for (let i = 1; i <= amount; i++) {
-    createSpellChoice(`${name}_${i}`, `${text} (${i})`, prerequisites, spells);
+  if (amount > 1) {
+    for (let i = 1; i <= amount; i++) {
+      createSpellChoice(`${name}_${i}`, `${text} (${i})`, prerequisites, spells);
+    }
+  } else {
+    createSpellChoice(name, text, prerequisites, spells);
   }
 }
 

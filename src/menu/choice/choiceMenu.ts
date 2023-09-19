@@ -22,6 +22,7 @@ export function displayChoiceMenu(choice: Choice, rl: readline.Interface) {
         (prerequisites) => {
           choice.prerequisites = prerequisites;
           choice.save();
+          displayChoiceMenu(choice, rl);
         },
         rl,
         choice.prerequisites

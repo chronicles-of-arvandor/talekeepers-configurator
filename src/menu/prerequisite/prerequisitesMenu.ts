@@ -11,7 +11,7 @@ import {
   NotPrerequisite,
   OrPrerequisite,
   Prerequisite, SavingThrowProficiencyPrerequisite,
-  SkillProficiencyPrerequisite, SpellPrerequisite, SubAncestryPrerequisite
+  SkillProficiencyPrerequisite, SpellPrerequisite, SubAncestryPrerequisite, SubClassPrerequisite
 } from '../../models/prerequisites';
 import { Ability } from '../../models/abilities';
 import { getAncestries } from '../../models/ancestries';
@@ -213,7 +213,8 @@ function displayNewPrerequisiteMenu(backAction: string, back: () => void, callba
         'Back to new prerequisite menu',
         () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
-        rl);
+        rl
+      );
     }),
     option('Item proficiency', () => {
       const itemProficiencyPrerequisite = new ItemProficiencyPrerequisite([]);
@@ -222,7 +223,8 @@ function displayNewPrerequisiteMenu(backAction: string, back: () => void, callba
         'Back to new prerequisite menu',
         () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
-        rl);
+        rl
+      );
     }),
     option('Language', () => {
       const languages = getLanguages();
@@ -237,7 +239,8 @@ function displayNewPrerequisiteMenu(backAction: string, back: () => void, callba
         'Back to new prerequisite menu',
         () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
-        rl);
+        rl
+      );
     }),
     option('Level', () => {
       const levelPrerequisite = new LevelPrerequisite(1);
@@ -246,7 +249,8 @@ function displayNewPrerequisiteMenu(backAction: string, back: () => void, callba
         'Back to new prerequisite menu',
         () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
-        rl);
+        rl
+      );
     }),
     option('Saving throw proficiency', () => {
       const savingThrowProficiencyPrerequisite = new SavingThrowProficiencyPrerequisite([]);
@@ -255,7 +259,8 @@ function displayNewPrerequisiteMenu(backAction: string, back: () => void, callba
         'Back to new prerequisite menu',
         () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
-        rl);
+        rl
+      );
     }),
     option('Skill proficiency', () => {
       const skillProficiencyPrerequisite = new SkillProficiencyPrerequisite([]);
@@ -264,7 +269,8 @@ function displayNewPrerequisiteMenu(backAction: string, back: () => void, callba
         'Back to new prerequisite menu',
         () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
-        rl);
+        rl
+      );
     }),
     option('Spell', () => {
       const spellPrerequisite = new SpellPrerequisite([]);
@@ -273,7 +279,8 @@ function displayNewPrerequisiteMenu(backAction: string, back: () => void, callba
         'Back to new prerequisite menu',
         () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
-        rl);
+        rl
+      );
     }),
     option('Sub-ancestry', () => {
       const ancestries = getAncestries();
@@ -295,7 +302,8 @@ function displayNewPrerequisiteMenu(backAction: string, back: () => void, callba
         'Back to new prerequisite menu',
         () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
-        rl);
+        rl
+      );
     }),
     option('Sub-class', () => {
       const classes = getClasses();
@@ -311,13 +319,14 @@ function displayNewPrerequisiteMenu(backAction: string, back: () => void, callba
         return;
       }
       const subClass = clazz.subClasses[0];
-      const subClassPrerequisite = new SubAncestryPrerequisite(clazz.id, subClass.id);
+      const subClassPrerequisite = new SubClassPrerequisite(clazz.id, subClass.id, 1);
       displayPrerequisiteMenu(
         subClassPrerequisite,
         'Back to new prerequisite menu',
         () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
-        rl);
+        rl
+      );
     }),
     option(backAction, () => {
       back();

@@ -16,7 +16,7 @@ export const getLanguages = () => {
 export const getLanguageById = (id: string) => getLanguages().find((language) => language.id === id);
 export const getLanguageByName = (name: string) => getLanguages().find((language) => language.name === name);
 
-class Language implements ConfigurationSerializable {
+export class Language implements ConfigurationSerializable {
   file: string;
   id: string;
   name: string;

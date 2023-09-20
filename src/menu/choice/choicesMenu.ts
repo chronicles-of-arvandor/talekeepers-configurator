@@ -12,6 +12,7 @@ import { displayNewAsiChoiceMenu } from './asiChoiceMenu';
 import { displayNewSkillProficiencyChoiceMenu } from './skillProficiencyChoiceMenu';
 import { displayNewItemProficiencyChoiceMenu } from './itemProficiencyChoiceMenu';
 import { displayChoiceSelectionMenu } from './choiceSelectionMenu';
+import { displayNewLanguageChoiceMenu } from './languageChoiceMenu';
 
 export function displayChoicesMenu(rl: readline.Interface) {
   const choices = getChoices();
@@ -76,6 +77,9 @@ function displayNewChoiceMenu(rl: readline.Interface) {
     }),
     option('Item proficiency choice(s)', () => {
       displayNewItemProficiencyChoiceMenu('item_proficiency_choice', 'Item proficiency choice', 1, [], [], rl);
+    }),
+    option('Language choice(s)', () => {
+      displayNewLanguageChoiceMenu('language_choice', 'Language choice', 1, [], [], rl);
     }),
     option('Other choice', () => {
       rl.question('File name: ', (fileName) => {

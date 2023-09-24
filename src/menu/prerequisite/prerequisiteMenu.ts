@@ -9,11 +9,14 @@ import {
   ItemProficiencyPrerequisite,
   LanguagePrerequisite,
   LevelPrerequisite,
+  NotPrerequisite,
+  OrPrerequisite,
   Prerequisite,
   SavingThrowProficiencyPrerequisite,
   SkillProficiencyPrerequisite,
   SpellPrerequisite,
-  SubAncestryPrerequisite, SubClassPrerequisite
+  SubAncestryPrerequisite,
+  SubClassPrerequisite
 } from '../../models/prerequisites';
 import * as readline from 'readline';
 import { menu, option } from '../menu';
@@ -21,7 +24,7 @@ import { gray, green, red } from 'chalk';
 import { displayAbilitySelectionMenu } from '../ability/abilitySelectionMenu';
 import { displayAncestrySelectionMenu } from '../ancestry/ancestrySelectionMenu';
 import { getAncestryById } from '../../models/ancestries';
-import { displayPrerequisitesMenu } from './prerequisitesMenu';
+import { displayNewPrerequisiteMenu, displayPrerequisitesMenu } from './prerequisitesMenu';
 import { displayBackgroundSelectionMenu } from '../background/backgroundSelectionMenu';
 import { getBackgroundById } from '../../models/backgrounds';
 import { getChoiceById } from '../../models/choices';
@@ -57,6 +60,10 @@ export function displayPrerequisiteMenu(prerequisite: Prerequisite, backAction: 
     displayLanguagePrerequisiteMenu(prerequisite as LanguagePrerequisite, backAction, back, callback, rl);
   } else if (LevelPrerequisite.prototype.isPrototypeOf(prerequisite)) {
     displayLevelPrerequisiteMenu(prerequisite as LevelPrerequisite, backAction, back, callback, rl);
+  } else if (NotPrerequisite.prototype.isPrototypeOf(prerequisite)) {
+    displayNotPrerequisiteMenu(prerequisite as NotPrerequisite, backAction, back, callback, rl);
+  } else if (OrPrerequisite.prototype.isPrototypeOf(prerequisite)) {
+    displayOrPrerequisiteMenu(prerequisite as OrPrerequisite, backAction, back, callback, rl);
   } else if (SavingThrowProficiencyPrerequisite.prototype.isPrototypeOf(prerequisite)) {
     displaySavingThrowProficiencyPrerequisiteMenu(prerequisite as SavingThrowProficiencyPrerequisite, backAction, back, callback, rl);
   } else if (SkillProficiencyPrerequisite.prototype.isPrototypeOf(prerequisite)) {
@@ -321,6 +328,48 @@ function displayLevelPrerequisiteMenu(prerequisite: LevelPrerequisite, backActio
         }
         displayLevelPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
       });
+    }),
+    option(green('Save'), () => {
+      callback(prerequisite);
+    }),
+    option(backAction, back)
+  ).display(rl);
+}
+
+function displayOrPrerequisiteMenu(prerequisite: OrPrerequisite, backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
+  menu(
+    'OR prerequisite',
+    option('Prerequisites ' + gray(`(${prerequisite.prerequisites.length})`), () => {
+      displayPrerequisitesMenu(
+        'Back to OR prerequisite',
+        () => displayOrPrerequisiteMenu(prerequisite, backAction, back, callback, rl),
+        (prerequisites) => {
+          prerequisite.prerequisites = prerequisites;
+          displayOrPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
+        },
+        rl
+      );
+    }),
+    option(green('Save'), () => {
+      callback(prerequisite);
+    }),
+    option(backAction, back)
+  ).display(rl);
+}
+
+function displayNotPrerequisiteMenu(prerequisite: NotPrerequisite, backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
+  menu(
+    'NOT prerequisite',
+    option('Prerequisite ' + gray(`(${prerequisite.prerequisite.getName()})`), () => {
+      displayNewPrerequisiteMenu(
+        'Back to NOT prerequisite',
+        () => displayNotPrerequisiteMenu(prerequisite, backAction, back, callback, rl),
+        (newPrerequisite) => {
+          prerequisite.prerequisite = newPrerequisite;
+          displayNotPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
+        },
+        rl
+      )
     }),
     option(green('Save'), () => {
       callback(prerequisite);

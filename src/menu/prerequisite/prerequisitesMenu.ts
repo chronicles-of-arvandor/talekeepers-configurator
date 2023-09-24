@@ -85,7 +85,7 @@ export function displayPrerequisitesMenu(
   ).display(rl);
 }
 
-function displayNewPrerequisiteMenu(backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
+export function displayNewPrerequisiteMenu(backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
   menu(
     'Prerequisite type',
     option('AND', () => {

@@ -347,7 +347,8 @@ function displayOrPrerequisiteMenu(prerequisite: OrPrerequisite, backAction: str
           prerequisite.prerequisites = prerequisites;
           displayOrPrerequisiteMenu(prerequisite, backAction, back, callback, rl);
         },
-        rl
+        rl,
+        prerequisite.prerequisites
       );
     }),
     option(green('Save'), () => {

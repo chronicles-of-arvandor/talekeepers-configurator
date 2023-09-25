@@ -7,6 +7,7 @@ import { Skill } from './skills';
 import { getClassById } from './classes';
 import { getSpellById } from './spells';
 import { getFeatById } from './feats';
+import { getLanguageById } from './languages';
 
 export interface Prerequisite extends ConfigurationSerializable {
   getName(): string;
@@ -180,20 +181,21 @@ export class ItemProficiencyPrerequisite implements Prerequisite {
 }
 
 export class LanguagePrerequisite implements Prerequisite {
-  languageId: string;
+  languageIds: string[];
 
-  constructor(languageId: string) {
-    this.languageId = languageId;
+  constructor(languageIds: string[]) {
+    this.languageIds = languageIds;
   }
 
   getName() {
-    return `Language: ${this.languageId}`;
+    const languages = this.languageIds.map((languageId) => getLanguageById(languageId));
+    return `Languages: ${languages.map((language) => language?.name ?? 'Unknown').join(', ')}`;
   }
 
   serialize(): { [key: string]: any } {
     return {
       '==': 'LanguagePrerequisite',
-      'language-id': this.languageId
+      'language-ids': this.languageIds
     }
   }
 }
@@ -394,7 +396,7 @@ export function deserializePrerequisite(serialized: { [key: string]: any }): Pre
       serialized['item-ids']
     );
     case 'LanguagePrerequisite': return new LanguagePrerequisite(
-      serialized['language-id']
+      serialized['language-ids']
     );
     case 'LevelPrerequisite': return new LevelPrerequisite(
       serialized['level']

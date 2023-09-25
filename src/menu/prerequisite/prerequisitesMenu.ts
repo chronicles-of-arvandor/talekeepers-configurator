@@ -233,7 +233,7 @@ export function displayNewPrerequisiteMenu(backAction: string, back: () => void,
         displayNewPrerequisiteMenu(backAction, back, callback, rl);
         return;
       }
-      const languagePrerequisite = new LanguagePrerequisite(languages[0].id);
+      const languagePrerequisite = new LanguagePrerequisite([languages[0].id]);
       displayPrerequisiteMenu(
         languagePrerequisite,
         'Back to new prerequisite menu',

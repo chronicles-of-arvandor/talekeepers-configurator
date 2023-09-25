@@ -113,7 +113,7 @@ function createLanguageChoice(name: string, text: string, prerequisites: Prerequ
         language.name,
         [
           new NotPrerequisite(
-            new LanguagePrerequisite(language.id)
+            new LanguagePrerequisite([language.id])
           )
         ]
       );
@@ -134,7 +134,7 @@ function updateEffects(choice: Choice) {
       return;
     }
     const optionLanguagePrerequisite = optionLanguageNotPrerequisite.prerequisite as LanguagePrerequisite;
-    const languageId = optionLanguagePrerequisite.languageId
+    const languageId = optionLanguagePrerequisite.languageIds[0];
     const language = getLanguageById(languageId);
     if (!language) {
       console.log(red(`Could not find language for option ${opt.text}`));

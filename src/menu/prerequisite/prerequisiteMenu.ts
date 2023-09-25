@@ -293,10 +293,11 @@ function displayItemProficiencyPrerequisiteMenu(prerequisite: ItemProficiencyPre
 }
 
 function displayLanguagePrerequisiteMenu(prerequisite: LanguagePrerequisite, backAction: string, back: () => void, callback: (prerequisite: Prerequisite) => void, rl: readline.Interface) {
-  const language = getLanguageById(prerequisite.languageId);
+  const languages = prerequisite.languageIds.map((languageId) => getLanguageById(languageId));
   menu(
-    'Language prerequisite',
-    option('Language ' + gray(`(${language?.name ?? 'Unknown'})`), () => {
+    'Language prerequisite\n' +
+    gray(languages.map((language) => language?.name ?? 'Unknown').join(", ")),
+    option('Add language', () => {
       rl.question('Language: ', (languageName) => {
         const language = getLanguageByName(languageName);
         if (!language) {
@@ -304,7 +305,19 @@ function displayLanguagePrerequisiteMenu(prerequisite: LanguagePrerequisite, bac
           displayLanguagePrerequisiteMenu(prerequisite, backAction, back, callback, rl);
           return;
         }
-        prerequisite.languageId = language.id;
+        prerequisite.languageIds.push(language.id);
+        displayLanguagePrerequisiteMenu(prerequisite, backAction, back, callback, rl);
+      });
+    }),
+    option('Remove language', () => {
+      rl.question('Language: ', (languageName) => {
+        const language = getLanguageByName(languageName);
+        if (!language) {
+          console.log(red('Language not found.'));
+          displayLanguagePrerequisiteMenu(prerequisite, backAction, back, callback, rl);
+          return;
+        }
+        prerequisite.languageIds = prerequisite.languageIds.filter((id) => id !== language.id);
         displayLanguagePrerequisiteMenu(prerequisite, backAction, back, callback, rl);
       });
     }),

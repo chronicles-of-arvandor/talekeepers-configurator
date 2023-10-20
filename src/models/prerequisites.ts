@@ -1,13 +1,13 @@
-import { Ability } from './abilities';
-import { ConfigurationSerializable } from './configurationSerializable';
-import { getAncestryById } from './ancestries';
-import { getBackgroundById } from './backgrounds';
-import { getChoiceById } from './choices';
-import { Skill } from './skills';
-import { getClassById } from './classes';
-import { getSpellById } from './spells';
-import { getFeatById } from './feats';
-import { getLanguageById } from './languages';
+import { Ability } from "./abilities";
+import { ConfigurationSerializable } from "./configurationSerializable";
+import { getAncestryById } from "./ancestries";
+import { getBackgroundById } from "./backgrounds";
+import { getChoiceById } from "./choices";
+import { Skill } from "./skills";
+import { getClassById } from "./classes";
+import { getSpellById } from "./spells";
+import { getFeatById } from "./feats";
+import { getLanguageById } from "./languages";
 
 export interface Prerequisite extends ConfigurationSerializable {
   getName(): string;
@@ -23,15 +23,15 @@ export class AbilityPrerequisite implements Prerequisite {
   }
 
   getName() {
-    return `Ability score: ${this.score} ${this.ability.displayName}`
+    return `Ability score: ${this.score} ${this.ability.displayName}`;
   }
 
   serialize(): { [key: string]: any } {
     return {
-      '==': 'AbilityPrerequisite',
-      'ability': this.ability.name,
-      'score': this.score
-    }
+      "==": "AbilityPrerequisite",
+      ability: this.ability.name,
+      score: this.score,
+    };
   }
 }
 
@@ -44,14 +44,14 @@ export class AncestryPrerequisite implements Prerequisite {
 
   getName() {
     const ancestry = getAncestryById(this.ancestryId);
-    return `Ancestry: ${ancestry?.name ?? 'Unknown'}`
+    return `Ancestry: ${ancestry?.name ?? "Unknown"}`;
   }
 
   serialize(): { [key: string]: any } {
     return {
-      '==': 'AncestryPrerequisite',
-      'ancestry-id': this.ancestryId
-    }
+      "==": "AncestryPrerequisite",
+      "ancestry-id": this.ancestryId,
+    };
   }
 }
 
@@ -63,14 +63,18 @@ export class AndPrerequisite implements Prerequisite {
   }
 
   getName() {
-    return this.prerequisites.map((prerequisite) => prerequisite.getName()).join(' AND ');
+    return this.prerequisites
+      .map((prerequisite) => prerequisite.getName())
+      .join(" AND ");
   }
 
   serialize(): { [key: string]: any } {
     return {
-      '==': 'AndPrerequisite',
-      'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
-    }
+      "==": "AndPrerequisite",
+      prerequisites: this.prerequisites.map((prerequisite) =>
+        prerequisite.serialize(),
+      ),
+    };
   }
 }
 
@@ -83,14 +87,14 @@ export class BackgroundPrerequisite implements Prerequisite {
 
   getName() {
     const background = getBackgroundById(this.backgroundId);
-    return `Background: ${background?.name ?? 'Unknown'}`
+    return `Background: ${background?.name ?? "Unknown"}`;
   }
 
   serialize(): { [key: string]: any } {
     return {
-      '==': 'BackgroundPrerequisite',
-      'background-id': this.backgroundId
-    }
+      "==": "BackgroundPrerequisite",
+      "background-id": this.backgroundId,
+    };
   }
 }
 
@@ -105,16 +109,18 @@ export class ChoicePrerequisite implements Prerequisite {
 
   getName() {
     const choice = getChoiceById(this.choiceId);
-    const option = choice?.options.find((option) => option.id === this.optionId);
-    return `Choice: ${choice?.text ?? 'Unknown'}: ${option?.text ?? 'Unknown'}`
+    const option = choice?.options.find(
+      (option) => option.id === this.optionId,
+    );
+    return `Choice: ${choice?.text ?? "Unknown"}: ${option?.text ?? "Unknown"}`;
   }
 
   serialize(): { [key: string]: any } {
     return {
-      '==': 'ChoicePrerequisite',
-      'choice-id': this.choiceId,
-      'option-id': this.optionId
-    }
+      "==": "ChoicePrerequisite",
+      "choice-id": this.choiceId,
+      "option-id": this.optionId,
+    };
   }
 }
 
@@ -129,15 +135,15 @@ export class ClassPrerequisite implements Prerequisite {
 
   getName() {
     const clazz = getClassById(this.classId);
-    return `Class: Lv${this.level} ${clazz?.name ?? 'Unknown'}`
+    return `Class: Lv${this.level} ${clazz?.name ?? "Unknown"}`;
   }
 
   serialize(): { [key: string]: any } {
     return {
-      '==': 'ClassPrerequisite',
-      'class-id': this.classId,
-      'level': this.level
-    }
+      "==": "ClassPrerequisite",
+      "class-id": this.classId,
+      level: this.level,
+    };
   }
 }
 
@@ -150,14 +156,14 @@ export class FeatPrerequisite implements Prerequisite {
 
   getName() {
     const feat = getFeatById(this.featId);
-    return `Feat: ${feat?.name ?? 'Unknown'}`;
+    return `Feat: ${feat?.name ?? "Unknown"}`;
   }
 
   serialize(): { [key: string]: any } {
     return {
-      '==': 'FeatPrerequisite',
-      'feat-id': this.featId
-    }
+      "==": "FeatPrerequisite",
+      "feat-id": this.featId,
+    };
   }
 }
 
@@ -169,14 +175,14 @@ export class ItemProficiencyPrerequisite implements Prerequisite {
   }
 
   getName() {
-    return `Item Proficiency: ${this.itemIds.join(', ')}`;
+    return `Item Proficiency: ${this.itemIds.join(", ")}`;
   }
 
   serialize(): { [key: string]: any } {
     return {
-      '==': 'ItemProficiencyPrerequisite',
-      'item-ids': this.itemIds
-    }
+      "==": "ItemProficiencyPrerequisite",
+      "item-ids": this.itemIds,
+    };
   }
 }
 
@@ -188,15 +194,19 @@ export class LanguagePrerequisite implements Prerequisite {
   }
 
   getName() {
-    const languages = this.languageIds.map((languageId) => getLanguageById(languageId));
-    return `Languages: ${languages.map((language) => language?.name ?? 'Unknown').join(', ')}`;
+    const languages = this.languageIds.map((languageId) =>
+      getLanguageById(languageId),
+    );
+    return `Languages: ${languages
+      .map((language) => language?.name ?? "Unknown")
+      .join(", ")}`;
   }
 
   serialize(): { [key: string]: any } {
     return {
-      '==': 'LanguagePrerequisite',
-      'language-ids': this.languageIds
-    }
+      "==": "LanguagePrerequisite",
+      "language-ids": this.languageIds,
+    };
   }
 }
 
@@ -213,9 +223,9 @@ export class LevelPrerequisite implements Prerequisite {
 
   serialize(): { [key: string]: any } {
     return {
-      '==': 'LevelPrerequisite',
-      'level': this.level
-    }
+      "==": "LevelPrerequisite",
+      level: this.level,
+    };
   }
 }
 
@@ -232,9 +242,9 @@ export class NotPrerequisite implements Prerequisite {
 
   serialize(): { [key: string]: any } {
     return {
-      '==': 'NotPrerequisite',
-      'prerequisite': this.prerequisite.serialize()
-    }
+      "==": "NotPrerequisite",
+      prerequisite: this.prerequisite.serialize(),
+    };
   }
 }
 
@@ -246,14 +256,18 @@ export class OrPrerequisite implements Prerequisite {
   }
 
   getName() {
-    return this.prerequisites.map((prerequisite) => prerequisite.getName()).join(' OR ');
+    return this.prerequisites
+      .map((prerequisite) => prerequisite.getName())
+      .join(" OR ");
   }
 
   serialize(): { [key: string]: any } {
     return {
-      '==': 'OrPrerequisite',
-      'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
-    }
+      "==": "OrPrerequisite",
+      prerequisites: this.prerequisites.map((prerequisite) =>
+        prerequisite.serialize(),
+      ),
+    };
   }
 }
 
@@ -265,14 +279,16 @@ export class SavingThrowProficiencyPrerequisite implements Prerequisite {
   }
 
   getName() {
-    return `Saving Throw Proficiency: ${this.abilities.map((ability) => ability.displayName).join(', ')}`;
+    return `Saving Throw Proficiency: ${this.abilities
+      .map((ability) => ability.displayName)
+      .join(", ")}`;
   }
 
   serialize(): { [key: string]: any } {
     return {
-      '==': 'SavingThrowProficiencyPrerequisite',
-      'abilities': this.abilities.map((ability) => ability.name)
-    }
+      "==": "SavingThrowProficiencyPrerequisite",
+      abilities: this.abilities.map((ability) => ability.name),
+    };
   }
 }
 
@@ -284,14 +300,16 @@ export class SkillProficiencyPrerequisite implements Prerequisite {
   }
 
   getName() {
-    return `Skill Proficiency: ${this.skills.map((skill) => skill.displayName).join(', ')}`;
+    return `Skill Proficiency: ${this.skills
+      .map((skill) => skill.displayName)
+      .join(", ")}`;
   }
 
   serialize(): { [key: string]: any } {
     return {
-      '==': 'SkillProficiencyPrerequisite',
-      'skills': this.skills.map((skill) => skill.name)
-    }
+      "==": "SkillProficiencyPrerequisite",
+      skills: this.skills.map((skill) => skill.name),
+    };
   }
 }
 
@@ -304,14 +322,16 @@ export class SpellPrerequisite implements Prerequisite {
 
   getName() {
     const spells = this.spellIds.map((spellId) => getSpellById(spellId));
-    return `Spells: ${spells.map((spell) => spell?.name ?? 'Unknown').join(', ')}`;
+    return `Spells: ${spells
+      .map((spell) => spell?.name ?? "Unknown")
+      .join(", ")}`;
   }
 
   serialize(): { [key: string]: any } {
     return {
-      '==': 'SpellPrerequisite',
-      'spell-ids': this.spellIds
-    }
+      "==": "SpellPrerequisite",
+      "spell-ids": this.spellIds,
+    };
   }
 }
 
@@ -326,16 +346,20 @@ export class SubAncestryPrerequisite implements Prerequisite {
 
   getName() {
     const ancestry = getAncestryById(this.ancestryId);
-    const subAncestry = ancestry?.subAncestries.find((subAncestry) => subAncestry.id === this.subAncestryId);
-    return `Sub Ancestry: ${subAncestry?.name ?? 'Unknown'} ${ancestry?.name ?? 'Unknown'}`
+    const subAncestry = ancestry?.subAncestries.find(
+      (subAncestry) => subAncestry.id === this.subAncestryId,
+    );
+    return `Sub Ancestry: ${subAncestry?.name ?? "Unknown"} ${
+      ancestry?.name ?? "Unknown"
+    }`;
   }
 
   serialize(): { [key: string]: any } {
     return {
-      '==': 'SubAncestryPrerequisite',
-      'ancestry-id': this.ancestryId,
-      'sub-ancestry-id': this.subAncestryId
-    }
+      "==": "SubAncestryPrerequisite",
+      "ancestry-id": this.ancestryId,
+      "sub-ancestry-id": this.subAncestryId,
+    };
   }
 }
 
@@ -352,79 +376,92 @@ export class SubClassPrerequisite implements Prerequisite {
 
   getName() {
     const clazz = getClassById(this.classId);
-    const subClass = clazz?.subClasses.find((subClass) => subClass.id === this.subClassId);
-    return `Sub-class: Lv${this.level} ${subClass?.name ?? 'Unknown'}`;
+    const subClass = clazz?.subClasses.find(
+      (subClass) => subClass.id === this.subClassId,
+    );
+    return `Sub-class: Lv${this.level} ${subClass?.name ?? "Unknown"}`;
   }
 
   serialize(): { [key: string]: any } {
     return {
-      '==': 'SubClassPrerequisite',
-      'class-id': this.classId,
-      'sub-class-id': this.subClassId,
-      'level': this.level
-    }
+      "==": "SubClassPrerequisite",
+      "class-id": this.classId,
+      "sub-class-id": this.subClassId,
+      level: this.level,
+    };
   }
 }
 
-export function deserializePrerequisite(serialized: { [key: string]: any }): Prerequisite {
-  switch (serialized['==']) {
-    case 'AbilityPrerequisite': return new AbilityPrerequisite(
-      serialized['ability'],
-      serialized['score']
-    );
-    case 'AncestryPrerequisite': return new AncestryPrerequisite(
-      serialized['ancestry-id']
-    );
-    case 'AndPrerequisite': return new AndPrerequisite(
-      serialized['prerequisites'].map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite))
-    );
-    case 'BackgroundPrerequisite': return new BackgroundPrerequisite(
-      serialized['background-id']
-    );
-    case 'ChoicePrerequisite': return new ChoicePrerequisite(
-      serialized['choice-id'],
-      serialized['option-id']
-    );
-    case 'ClassPrerequisite': return new ClassPrerequisite(
-      serialized['class-id'],
-      serialized['level']
-    );
-    case 'FeatPrerequisite': return new FeatPrerequisite(
-      serialized['feat-id']
-    );
-    case 'ItemProficiencyPrerequisite': return new ItemProficiencyPrerequisite(
-      serialized['item-ids']
-    );
-    case 'LanguagePrerequisite': return new LanguagePrerequisite(
-      serialized['language-ids']
-    );
-    case 'LevelPrerequisite': return new LevelPrerequisite(
-      serialized['level']
-    );
-    case 'NotPrerequisite': return new NotPrerequisite(
-      deserializePrerequisite(serialized['prerequisite'])
-    );
-    case 'OrPrerequisite': return new OrPrerequisite(
-      serialized['prerequisites'].map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite))
-    );
-    case 'SavingThrowProficiencyPrerequisite': return new SavingThrowProficiencyPrerequisite(
-      serialized['abilities'].map((ability: string) => Ability.getByName(ability))
-    );
-    case 'SkillProficiencyPrerequisite': return new SkillProficiencyPrerequisite(
-      serialized['skills'].map((skill: string) => Skill.getByName(skill))
-    );
-    case 'SpellPrerequisite': return new SpellPrerequisite(
-      serialized['spell-ids']
-    );
-    case 'SubAncestryPrerequisite': return new SubAncestryPrerequisite(
-      serialized['ancestry-id'],
-      serialized['sub-ancestry-id']
-    );
-    case 'SubClassPrerequisite': return new SubClassPrerequisite(
-      serialized['class-id'],
-      serialized['sub-class-id'],
-      serialized['level']
-    );
-    default: throw new Error(`Unknown prerequisite type: ${serialized['==']}`);
+export function deserializePrerequisite(serialized: {
+  [key: string]: any;
+}): Prerequisite {
+  switch (serialized["=="]) {
+    case "AbilityPrerequisite":
+      return new AbilityPrerequisite(
+        serialized["ability"],
+        serialized["score"],
+      );
+    case "AncestryPrerequisite":
+      return new AncestryPrerequisite(serialized["ancestry-id"]);
+    case "AndPrerequisite":
+      return new AndPrerequisite(
+        serialized["prerequisites"].map(
+          (prerequisite: { [key: string]: any }) =>
+            deserializePrerequisite(prerequisite),
+        ),
+      );
+    case "BackgroundPrerequisite":
+      return new BackgroundPrerequisite(serialized["background-id"]);
+    case "ChoicePrerequisite":
+      return new ChoicePrerequisite(
+        serialized["choice-id"],
+        serialized["option-id"],
+      );
+    case "ClassPrerequisite":
+      return new ClassPrerequisite(serialized["class-id"], serialized["level"]);
+    case "FeatPrerequisite":
+      return new FeatPrerequisite(serialized["feat-id"]);
+    case "ItemProficiencyPrerequisite":
+      return new ItemProficiencyPrerequisite(serialized["item-ids"]);
+    case "LanguagePrerequisite":
+      return new LanguagePrerequisite(serialized["language-ids"]);
+    case "LevelPrerequisite":
+      return new LevelPrerequisite(serialized["level"]);
+    case "NotPrerequisite":
+      return new NotPrerequisite(
+        deserializePrerequisite(serialized["prerequisite"]),
+      );
+    case "OrPrerequisite":
+      return new OrPrerequisite(
+        serialized["prerequisites"].map(
+          (prerequisite: { [key: string]: any }) =>
+            deserializePrerequisite(prerequisite),
+        ),
+      );
+    case "SavingThrowProficiencyPrerequisite":
+      return new SavingThrowProficiencyPrerequisite(
+        serialized["abilities"].map((ability: string) =>
+          Ability.getByName(ability),
+        ),
+      );
+    case "SkillProficiencyPrerequisite":
+      return new SkillProficiencyPrerequisite(
+        serialized["skills"].map((skill: string) => Skill.getByName(skill)),
+      );
+    case "SpellPrerequisite":
+      return new SpellPrerequisite(serialized["spell-ids"]);
+    case "SubAncestryPrerequisite":
+      return new SubAncestryPrerequisite(
+        serialized["ancestry-id"],
+        serialized["sub-ancestry-id"],
+      );
+    case "SubClassPrerequisite":
+      return new SubClassPrerequisite(
+        serialized["class-id"],
+        serialized["sub-class-id"],
+        serialized["level"],
+      );
+    default:
+      throw new Error(`Unknown prerequisite type: ${serialized["=="]}`);
   }
 }

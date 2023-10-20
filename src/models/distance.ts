@@ -1,6 +1,6 @@
-import { ConfigurationSerializable } from './configurationSerializable';
+import { ConfigurationSerializable } from "./configurationSerializable";
 
-type DistanceUnit = 'FEET';
+type DistanceUnit = "FEET";
 
 export class Distance implements ConfigurationSerializable {
   value: number;
@@ -13,9 +13,9 @@ export class Distance implements ConfigurationSerializable {
 
   serialize(): { [key: string]: any } {
     return {
-      '==': 'Distance',
-      'value': this.value,
-      'unit': this.unit
-    }
+      "==": "Distance",
+      value: this.value,
+      unit: this.unit,
+    };
   }
 }

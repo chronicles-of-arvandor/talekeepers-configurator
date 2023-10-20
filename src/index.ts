@@ -1,27 +1,27 @@
-import * as readline from 'readline';
-import { menu, option } from './menu/menu';
-import { displaySettingsMenu } from './menu/settings/settingsMenu';
-import { displayAncestriesMenu } from './menu/ancestry/ancestriesMenu';
-import { displayBackgroundsMenu } from './menu/background/backgroundsMenu';
-import { displayChoicesMenu } from './menu/choice/choicesMenu';
-import { displayEffectsMenu } from './menu/effect/effectsMenu';
+import * as readline from "readline";
+import { menu, option } from "./menu/menu";
+import { displaySettingsMenu } from "./menu/settings/settingsMenu";
+import { displayAncestriesMenu } from "./menu/ancestry/ancestriesMenu";
+import { displayBackgroundsMenu } from "./menu/background/backgroundsMenu";
+import { displayChoicesMenu } from "./menu/choice/choicesMenu";
+import { displayEffectsMenu } from "./menu/effect/effectsMenu";
 
 export function displayMainMenu(rl: readline.Interface) {
   menu(
-    'Main menu',
-    option('Ancestries', () => {
+    "Main menu",
+    option("Ancestries", () => {
       displayAncestriesMenu(rl);
     }),
-    option('Backgrounds', () => {
+    option("Backgrounds", () => {
       displayBackgroundsMenu(rl);
     }),
-    option('Choices', () => {
+    option("Choices", () => {
       displayChoicesMenu(rl);
     }),
     // option('Classes', () => {
     //   displayClassesMenu(rl);
     // }),
-    option('Effects', () => {
+    option("Effects", () => {
       displayEffectsMenu(rl);
     }),
     // option('Feats', () => {
@@ -33,17 +33,17 @@ export function displayMainMenu(rl: readline.Interface) {
     // option('Spells', () => {
     //   displaySpellsMenu(rl);
     // }),
-    option('Settings', () => {
+    option("Settings", () => {
       displaySettingsMenu(rl);
     }),
-    option('Exit', () => {
+    option("Exit", () => {
       rl.close();
-    })
+    }),
   ).display(rl);
 }
 
 const rl = readline.createInterface(process.stdin, process.stdout);
-rl.on('close', () => {
+rl.on("close", () => {
   process.exit();
 });
 

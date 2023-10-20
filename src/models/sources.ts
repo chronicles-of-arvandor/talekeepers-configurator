@@ -1,4 +1,4 @@
-import { ConfigurationSerializable } from './configurationSerializable';
+import { ConfigurationSerializable } from "./configurationSerializable";
 
 export class Source implements ConfigurationSerializable {
   source: string;
@@ -11,13 +11,13 @@ export class Source implements ConfigurationSerializable {
 
   serialize() {
     return {
-      '==': 'Source',
-      'source': this.source,
-      'page': this.page
-    }
+      "==": "Source",
+      source: this.source,
+      page: this.page,
+    };
   }
 }
 
 export function deserializeSource(serialized: { [key: string]: any }) {
-  return new Source(serialized['source'], serialized['page']);
+  return new Source(serialized["source"], serialized["page"]);
 }

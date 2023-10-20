@@ -1,4 +1,4 @@
-import { ConfigurationSerializable } from './configurationSerializable';
+import { ConfigurationSerializable } from "./configurationSerializable";
 
 export class CharacterTrait implements ConfigurationSerializable {
   name: string;
@@ -11,9 +11,9 @@ export class CharacterTrait implements ConfigurationSerializable {
 
   serialize(): { [key: string]: any } {
     return {
-      '==': 'CharacterTrait',
-      'name': this.name,
-      'description': this.description
+      "==": "CharacterTrait",
+      name: this.name,
+      description: this.description,
     };
   }
 }

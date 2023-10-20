@@ -1,21 +1,25 @@
-import * as path from 'path';
-import * as fs from 'fs';
-import { parse, stringify } from 'yaml';
-import { getBaseDirectory } from '../settings';
-import { ConfigurationSerializable } from './configurationSerializable';
-import { deserializePrerequisite, Prerequisite } from './prerequisites';
-import { Ability } from './abilities';
-import { CharacterTrait } from './traits';
-import { Skill } from './skills';
+import * as path from "path";
+import * as fs from "fs";
+import { parse, stringify } from "yaml";
+import { getBaseDirectory } from "../settings";
+import { ConfigurationSerializable } from "./configurationSerializable";
+import { deserializePrerequisite, Prerequisite } from "./prerequisites";
+import { Ability } from "./abilities";
+import { CharacterTrait } from "./traits";
+import { Skill } from "./skills";
 
-export const getEffectsDirectory = () => path.join(getBaseDirectory(), 'effects');
+export const getEffectsDirectory = () =>
+  path.join(getBaseDirectory(), "effects");
 
 export const getEffects: () => Effect[] = () => {
   return fs.readdirSync(getEffectsDirectory()).map((effectFile) => {
     let effectPath = path.join(getEffectsDirectory(), effectFile);
-    return deserializeEffect(effectPath, parse(fs.readFileSync(effectPath, 'utf8')).effect);
+    return deserializeEffect(
+      effectPath,
+      parse(fs.readFileSync(effectPath, "utf8")).effect,
+    );
   });
-}
+};
 
 export interface Effect extends ConfigurationSerializable {
   file: string;
@@ -28,7 +32,11 @@ export class AbilityEffect implements Effect {
   abilities: { [ability: string]: number };
   prerequisites: Prerequisite[];
 
-  constructor(file: string, abilities: { [ability: string]: number }, prerequisites: Prerequisite[]) {
+  constructor(
+    file: string,
+    abilities: { [ability: string]: number },
+    prerequisites: Prerequisite[],
+  ) {
     this.file = file;
     this.abilities = abilities;
     this.prerequisites = prerequisites;
@@ -36,16 +44,21 @@ export class AbilityEffect implements Effect {
 
   serialize() {
     return {
-      '==': 'AbilityEffect',
-      'abilities': this.abilities,
-      'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
-    }
+      "==": "AbilityEffect",
+      abilities: this.abilities,
+      prerequisites: this.prerequisites.map((prerequisite) =>
+        prerequisite.serialize(),
+      ),
+    };
   }
 
   save() {
-    fs.writeFileSync(this.file, stringify({
-      effect: this.serialize()
-    }));
+    fs.writeFileSync(
+      this.file,
+      stringify({
+        effect: this.serialize(),
+      }),
+    );
   }
 }
 
@@ -54,7 +67,11 @@ export class CharacterTraitEffect implements Effect {
   traits: CharacterTrait[];
   prerequisites: Prerequisite[];
 
-  constructor(file: string, traits: CharacterTrait[], prerequisites: Prerequisite[]) {
+  constructor(
+    file: string,
+    traits: CharacterTrait[],
+    prerequisites: Prerequisite[],
+  ) {
     this.file = file;
     this.traits = traits;
     this.prerequisites = prerequisites;
@@ -62,16 +79,21 @@ export class CharacterTraitEffect implements Effect {
 
   serialize() {
     return {
-      '==': 'CharacterTraitEffect',
-      'traits': this.traits.map((trait) => trait.serialize()),
-      'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
-    }
+      "==": "CharacterTraitEffect",
+      traits: this.traits.map((trait) => trait.serialize()),
+      prerequisites: this.prerequisites.map((prerequisite) =>
+        prerequisite.serialize(),
+      ),
+    };
   }
 
   save() {
-    fs.writeFileSync(this.file, stringify({
-      effect: this.serialize()
-    }));
+    fs.writeFileSync(
+      this.file,
+      stringify({
+        effect: this.serialize(),
+      }),
+    );
   }
 }
 
@@ -88,16 +110,21 @@ export class FeatEffect implements Effect {
 
   serialize() {
     return {
-      '==': 'FeatEffect',
-      'feats': this.feats,
-      'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
-    }
+      "==": "FeatEffect",
+      feats: this.feats,
+      prerequisites: this.prerequisites.map((prerequisite) =>
+        prerequisite.serialize(),
+      ),
+    };
   }
 
   save() {
-    fs.writeFileSync(this.file, stringify({
-      effect: this.serialize()
-    }));
+    fs.writeFileSync(
+      this.file,
+      stringify({
+        effect: this.serialize(),
+      }),
+    );
   }
 }
 
@@ -114,16 +141,21 @@ export class InitiativeAbilityModBonusEffect implements Effect {
 
   serialize() {
     return {
-      '==': 'InitiativeAbilityModBonusEffect',
-      'ability': this.ability.name,
-      'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
-    }
+      "==": "InitiativeAbilityModBonusEffect",
+      ability: this.ability.name,
+      prerequisites: this.prerequisites.map((prerequisite) =>
+        prerequisite.serialize(),
+      ),
+    };
   }
 
   save() {
-    fs.writeFileSync(this.file, stringify({
-      effect: this.serialize()
-    }));
+    fs.writeFileSync(
+      this.file,
+      stringify({
+        effect: this.serialize(),
+      }),
+    );
   }
 }
 
@@ -140,16 +172,21 @@ export class InitiativeBonusEffect implements Effect {
 
   serialize() {
     return {
-      '==': 'InitiativeBonusEffect',
-      'bonus': this.bonus,
-      'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
-    }
+      "==": "InitiativeBonusEffect",
+      bonus: this.bonus,
+      prerequisites: this.prerequisites.map((prerequisite) =>
+        prerequisite.serialize(),
+      ),
+    };
   }
 
   save() {
-    fs.writeFileSync(this.file, stringify({
-      effect: this.serialize()
-    }));
+    fs.writeFileSync(
+      this.file,
+      stringify({
+        effect: this.serialize(),
+      }),
+    );
   }
 }
 
@@ -166,16 +203,21 @@ export class ItemProficiencyEffect implements Effect {
 
   serialize() {
     return {
-      '==': 'ItemProficiencyEffect',
-      'items': this.items,
-      'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
-    }
+      "==": "ItemProficiencyEffect",
+      items: this.items,
+      prerequisites: this.prerequisites.map((prerequisite) =>
+        prerequisite.serialize(),
+      ),
+    };
   }
 
   save() {
-    fs.writeFileSync(this.file, stringify({
-      effect: this.serialize()
-    }));
+    fs.writeFileSync(
+      this.file,
+      stringify({
+        effect: this.serialize(),
+      }),
+    );
   }
 }
 
@@ -190,15 +232,20 @@ export class JackOfAllTradesEffect implements Effect {
 
   serialize() {
     return {
-      '==': 'JackOfAllTradesEffect',
-      'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
-    }
+      "==": "JackOfAllTradesEffect",
+      prerequisites: this.prerequisites.map((prerequisite) =>
+        prerequisite.serialize(),
+      ),
+    };
   }
 
   save() {
-    fs.writeFileSync(this.file, stringify({
-      effect: this.serialize()
-    }));
+    fs.writeFileSync(
+      this.file,
+      stringify({
+        effect: this.serialize(),
+      }),
+    );
   }
 }
 
@@ -207,7 +254,11 @@ export class LanguageEffect implements Effect {
   languages: string[];
   prerequisites: Prerequisite[];
 
-  constructor(file: string, languages: string[], prerequisites: Prerequisite[]) {
+  constructor(
+    file: string,
+    languages: string[],
+    prerequisites: Prerequisite[],
+  ) {
     this.file = file;
     this.languages = languages;
     this.prerequisites = prerequisites;
@@ -215,16 +266,21 @@ export class LanguageEffect implements Effect {
 
   serialize() {
     return {
-      '==': 'LanguageEffect',
-      'languages': this.languages,
-      'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
-    }
+      "==": "LanguageEffect",
+      languages: this.languages,
+      prerequisites: this.prerequisites.map((prerequisite) =>
+        prerequisite.serialize(),
+      ),
+    };
   }
 
   save() {
-    fs.writeFileSync(this.file, stringify({
-      effect: this.serialize()
-    }));
+    fs.writeFileSync(
+      this.file,
+      stringify({
+        effect: this.serialize(),
+      }),
+    );
   }
 }
 
@@ -233,7 +289,11 @@ export class SavingThrowProficiencyEffect implements Effect {
   abilities: Ability[];
   prerequisites: Prerequisite[];
 
-  constructor(file: string, abilities: Ability[], prerequisites: Prerequisite[]) {
+  constructor(
+    file: string,
+    abilities: Ability[],
+    prerequisites: Prerequisite[],
+  ) {
     this.file = file;
     this.abilities = abilities;
     this.prerequisites = prerequisites;
@@ -241,16 +301,21 @@ export class SavingThrowProficiencyEffect implements Effect {
 
   serialize() {
     return {
-      '==': 'SavingThrowProficiencyEffect',
-      'abilities': this.abilities.map((ability) => ability.name),
-      'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
-    }
+      "==": "SavingThrowProficiencyEffect",
+      abilities: this.abilities.map((ability) => ability.name),
+      prerequisites: this.prerequisites.map((prerequisite) =>
+        prerequisite.serialize(),
+      ),
+    };
   }
 
   save() {
-    fs.writeFileSync(this.file, stringify({
-      effect: this.serialize()
-    }));
+    fs.writeFileSync(
+      this.file,
+      stringify({
+        effect: this.serialize(),
+      }),
+    );
   }
 }
 
@@ -267,16 +332,21 @@ export class SkillProficiencyEffect implements Effect {
 
   serialize() {
     return {
-      '==': 'SkillProficiencyEffect',
-      'skills': this.skills.map((skill) => skill.name),
-      'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
-    }
+      "==": "SkillProficiencyEffect",
+      skills: this.skills.map((skill) => skill.name),
+      prerequisites: this.prerequisites.map((prerequisite) =>
+        prerequisite.serialize(),
+      ),
+    };
   }
 
   save() {
-    fs.writeFileSync(this.file, stringify({
-      effect: this.serialize()
-    }));
+    fs.writeFileSync(
+      this.file,
+      stringify({
+        effect: this.serialize(),
+      }),
+    );
   }
 }
 
@@ -293,16 +363,21 @@ export class SpeedEffect implements Effect {
 
   serialize() {
     return {
-      '==': 'SpeedEffect',
-      'speed': this.speed,
-      'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
-    }
+      "==": "SpeedEffect",
+      speed: this.speed,
+      prerequisites: this.prerequisites.map((prerequisite) =>
+        prerequisite.serialize(),
+      ),
+    };
   }
 
   save() {
-    fs.writeFileSync(this.file, stringify({
-      effect: this.serialize()
-    }));
+    fs.writeFileSync(
+      this.file,
+      stringify({
+        effect: this.serialize(),
+      }),
+    );
   }
 }
 
@@ -319,80 +394,139 @@ export class SpellEffect implements Effect {
 
   serialize() {
     return {
-      '==': 'SpellEffect',
-      'spells': this.spells,
-      'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
-    }
+      "==": "SpellEffect",
+      spells: this.spells,
+      prerequisites: this.prerequisites.map((prerequisite) =>
+        prerequisite.serialize(),
+      ),
+    };
   }
 
   save() {
-    fs.writeFileSync(this.file, stringify({
-      effect: this.serialize()
-    }));
+    fs.writeFileSync(
+      this.file,
+      stringify({
+        effect: this.serialize(),
+      }),
+    );
   }
 }
 
 function deserializeEffect(file: string, serialized: { [key: string]: any }) {
-  switch (serialized['==']) {
-    case 'AbilityEffect': return new AbilityEffect(
-      file,
-      serialized['abilities'],
-      serialized['prerequisites'].map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite))
-    );
-    case 'CharacterTraitEffect': return new CharacterTraitEffect(
-      file,
-      serialized['traits'].map((trait: { [key: string]: any }) => new CharacterTrait(trait['name'], trait['description'])),
-      serialized['prerequisites'].map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite))
-    );
-    case 'FeatEffect': return new FeatEffect(
-      file,
-      serialized['feats'],
-      serialized['prerequisites'].map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite))
-    );
-    case 'InitiativeAbilityModBonusEffect': return new InitiativeAbilityModBonusEffect(
-      file,
-      Ability.getByName(serialized['ability']),
-      serialized['prerequisites'].map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite))
-    );
-    case 'InitiativeBonusEffect': return new InitiativeBonusEffect(
-      file,
-      serialized['bonus'],
-      serialized['prerequisites'].map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite))
-    );
-    case 'ItemProficiencyEffect': return new ItemProficiencyEffect(
-      file,
-      serialized['items'],
-      serialized['prerequisites'].map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite))
-    );
-    case 'JackOfAllTradesEffect': return new JackOfAllTradesEffect(
-      file,
-      serialized['prerequisites'].map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite))
-    );
-    case 'LanguageEffect': return new LanguageEffect(
-      file,
-      serialized['languages'],
-      serialized['prerequisites'].map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite))
-    );
-    case 'SavingThrowProficiencyEffect': return new SavingThrowProficiencyEffect(
-      file,
-      serialized['abilities'].map((ability: string) => Ability.getByName(ability)),
-      serialized['prerequisites'].map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite))
-    );
-    case 'SkillProficiencyEffect': return new SkillProficiencyEffect(
-      file,
-      serialized['skills'].map((skill: string) => Skill.getByName(skill)),
-      serialized['prerequisites'].map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite))
-    );
-    case 'SpeedEffect': return new SpeedEffect(
-      file,
-      serialized['speed'],
-      serialized['prerequisites'].map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite))
-    );
-    case 'SpellEffect': return new SpellEffect(
-      file,
-      serialized['spells'],
-      serialized['prerequisites'].map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite))
-    );
-    default: throw new Error(`Unknown effect type: ${serialized['==']}`);
+  switch (serialized["=="]) {
+    case "AbilityEffect":
+      return new AbilityEffect(
+        file,
+        serialized["abilities"],
+        serialized["prerequisites"].map(
+          (prerequisite: { [key: string]: any }) =>
+            deserializePrerequisite(prerequisite),
+        ),
+      );
+    case "CharacterTraitEffect":
+      return new CharacterTraitEffect(
+        file,
+        serialized["traits"].map(
+          (trait: { [key: string]: any }) =>
+            new CharacterTrait(trait["name"], trait["description"]),
+        ),
+        serialized["prerequisites"].map(
+          (prerequisite: { [key: string]: any }) =>
+            deserializePrerequisite(prerequisite),
+        ),
+      );
+    case "FeatEffect":
+      return new FeatEffect(
+        file,
+        serialized["feats"],
+        serialized["prerequisites"].map(
+          (prerequisite: { [key: string]: any }) =>
+            deserializePrerequisite(prerequisite),
+        ),
+      );
+    case "InitiativeAbilityModBonusEffect":
+      return new InitiativeAbilityModBonusEffect(
+        file,
+        Ability.getByName(serialized["ability"]),
+        serialized["prerequisites"].map(
+          (prerequisite: { [key: string]: any }) =>
+            deserializePrerequisite(prerequisite),
+        ),
+      );
+    case "InitiativeBonusEffect":
+      return new InitiativeBonusEffect(
+        file,
+        serialized["bonus"],
+        serialized["prerequisites"].map(
+          (prerequisite: { [key: string]: any }) =>
+            deserializePrerequisite(prerequisite),
+        ),
+      );
+    case "ItemProficiencyEffect":
+      return new ItemProficiencyEffect(
+        file,
+        serialized["items"],
+        serialized["prerequisites"].map(
+          (prerequisite: { [key: string]: any }) =>
+            deserializePrerequisite(prerequisite),
+        ),
+      );
+    case "JackOfAllTradesEffect":
+      return new JackOfAllTradesEffect(
+        file,
+        serialized["prerequisites"].map(
+          (prerequisite: { [key: string]: any }) =>
+            deserializePrerequisite(prerequisite),
+        ),
+      );
+    case "LanguageEffect":
+      return new LanguageEffect(
+        file,
+        serialized["languages"],
+        serialized["prerequisites"].map(
+          (prerequisite: { [key: string]: any }) =>
+            deserializePrerequisite(prerequisite),
+        ),
+      );
+    case "SavingThrowProficiencyEffect":
+      return new SavingThrowProficiencyEffect(
+        file,
+        serialized["abilities"].map((ability: string) =>
+          Ability.getByName(ability),
+        ),
+        serialized["prerequisites"].map(
+          (prerequisite: { [key: string]: any }) =>
+            deserializePrerequisite(prerequisite),
+        ),
+      );
+    case "SkillProficiencyEffect":
+      return new SkillProficiencyEffect(
+        file,
+        serialized["skills"].map((skill: string) => Skill.getByName(skill)),
+        serialized["prerequisites"].map(
+          (prerequisite: { [key: string]: any }) =>
+            deserializePrerequisite(prerequisite),
+        ),
+      );
+    case "SpeedEffect":
+      return new SpeedEffect(
+        file,
+        serialized["speed"],
+        serialized["prerequisites"].map(
+          (prerequisite: { [key: string]: any }) =>
+            deserializePrerequisite(prerequisite),
+        ),
+      );
+    case "SpellEffect":
+      return new SpellEffect(
+        file,
+        serialized["spells"],
+        serialized["prerequisites"].map(
+          (prerequisite: { [key: string]: any }) =>
+            deserializePrerequisite(prerequisite),
+        ),
+      );
+    default:
+      throw new Error(`Unknown effect type: ${serialized["=="]}`);
   }
 }

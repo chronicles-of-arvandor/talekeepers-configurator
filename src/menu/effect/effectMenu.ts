@@ -3,8 +3,15 @@ import {
   CharacterTraitEffect,
   Effect,
   FeatEffect,
+  InitiativeAbilityModBonusEffect,
+  InitiativeBonusEffect,
   ItemProficiencyEffect,
-  LanguageEffect, SavingThrowProficiencyEffect, SkillProficiencyEffect, SpeedEffect, SpellEffect
+  JackOfAllTradesEffect,
+  LanguageEffect,
+  SavingThrowProficiencyEffect,
+  SkillProficiencyEffect,
+  SpeedEffect,
+  SpellEffect
 } from '../../models/effects';
 import { displayEffectsMenu } from './effectsMenu';
 import { menu, option } from '../menu';
@@ -26,8 +33,14 @@ export function displayEffectMenu(effect: Effect, rl: readline.Interface) {
     displayCharacterTraitEffectMenu(effect as CharacterTraitEffect, rl);
   } else if (FeatEffect.prototype.isPrototypeOf(effect)) {
     displayFeatEffectMenu(effect as FeatEffect, rl);
+  } else if (InitiativeAbilityModBonusEffect.prototype.isPrototypeOf(effect)) {
+    displayInitiativeAbilityModBonusEffectMenu(effect as InitiativeAbilityModBonusEffect, rl);
+  } else if (InitiativeBonusEffect.prototype.isPrototypeOf(effect)) {
+    displayInitiativeBonusEffectMenu(effect as InitiativeBonusEffect, rl);
   } else if (ItemProficiencyEffect.prototype.isPrototypeOf(effect)) {
     displayItemProficiencyEffectMenu(effect as ItemProficiencyEffect, rl);
+  } else if (JackOfAllTradesEffect.prototype.isPrototypeOf(effect)) {
+    displayJackOfAllTradesEffectMenu(effect as JackOfAllTradesEffect, rl);
   } else if (LanguageEffect.prototype.isPrototypeOf(effect)) {
     displayLanguageEffectMenu(effect as LanguageEffect, rl);
   } else if (SavingThrowProficiencyEffect.prototype.isPrototypeOf(effect)) {
@@ -242,6 +255,87 @@ function displayFeatEffectFeatsMenu(effect: FeatEffect, rl: readline.Interface) 
   )
 }
 
+function displayInitiativeAbilityModBonusEffectMenu(effect: InitiativeAbilityModBonusEffect, rl: readline.Interface) {
+  menu(
+    path.basename(effect.file),
+    option('Ability', () => {
+      displayAbilitySelectionMenu(
+        'Back to initiative ability modifier bonus effect menu',
+        () => {
+          displayInitiativeAbilityModBonusEffectMenu(effect, rl);
+        },
+        (ability) => {
+          effect.ability = ability;
+          effect.save();
+          displayInitiativeAbilityModBonusEffectMenu(effect, rl);
+        },
+        rl
+      )
+    }),
+    option('Prerequisites', () => {
+      displayPrerequisitesMenu(
+        'Back to effect menu',
+        () => {
+          displayInitiativeAbilityModBonusEffectMenu(effect, rl);
+        },
+        (prerequisites) => {
+          effect.prerequisites = prerequisites;
+          effect.save();
+          displayInitiativeAbilityModBonusEffectMenu(effect, rl);
+        },
+        rl,
+        effect.prerequisites
+      )
+    }),
+    option(red('Delete'), () => {
+      fs.rmSync(effect.file);
+    }),
+    option('Back to effects menu', () => {
+      displayEffectsMenu(rl);
+    })
+  ).display(rl);
+}
+
+function displayInitiativeBonusEffectMenu(effect: InitiativeBonusEffect, rl: readline.Interface) {
+  menu(
+    path.basename(effect.file),
+    option('Bonus', () => {
+      rl.question('Bonus: ', (bonus) => {
+        const bonusInt = parseInt(bonus);
+        if (isNaN(bonusInt)) {
+          console.log(red('Bonus must be an integer.'));
+          displayInitiativeBonusEffectMenu(effect, rl);
+          return;
+        }
+        effect.bonus = bonusInt;
+        effect.save();
+        displayInitiativeBonusEffectMenu(effect, rl);
+      });
+    }),
+    option('Prerequisites', () => {
+      displayPrerequisitesMenu(
+        'Back to effect menu',
+        () => {
+          displayInitiativeBonusEffectMenu(effect, rl);
+        },
+        (prerequisites) => {
+          effect.prerequisites = prerequisites;
+          effect.save();
+          displayInitiativeBonusEffectMenu(effect, rl);
+        },
+        rl,
+        effect.prerequisites
+      )
+    }),
+    option(red('Delete'), () => {
+      fs.rmSync(effect.file);
+    }),
+    option('Back to effects menu', () => {
+      displayEffectsMenu(rl);
+    })
+  ).display(rl);
+}
+
 function displayItemProficiencyEffectMenu(effect: ItemProficiencyEffect, rl: readline.Interface) {
   menu(
     path.basename(effect.file),
@@ -297,6 +391,33 @@ function displayItemProficiencyEffectItemsMenu(effect: ItemProficiencyEffect, rl
     }),
     option('Back to effect menu', () => {
       displayEffectMenu(effect, rl);
+    })
+  ).display(rl);
+}
+
+function displayJackOfAllTradesEffectMenu(effect: JackOfAllTradesEffect, rl: readline.Interface) {
+  menu(
+    'Jack of all trades',
+    option('Prerequisites', () => {
+      displayPrerequisitesMenu(
+        'Back to effect menu',
+        () => {
+          displayJackOfAllTradesEffectMenu(effect, rl);
+        },
+        (prerequisites) => {
+          effect.prerequisites = prerequisites;
+          effect.save();
+          displayJackOfAllTradesEffectMenu(effect, rl);
+        },
+        rl,
+        effect.prerequisites
+      )
+    }),
+    option(red('Delete'), () => {
+      fs.rmSync(effect.file);
+    }),
+    option('Back to effects menu', () => {
+      displayEffectsMenu(rl);
     })
   ).display(rl);
 }

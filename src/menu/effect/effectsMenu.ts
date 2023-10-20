@@ -4,7 +4,7 @@ import {
   CharacterTraitEffect,
   FeatEffect,
   getEffects,
-  getEffectsDirectory,
+  getEffectsDirectory, InitiativeAbilityModBonusEffect, InitiativeBonusEffect,
   ItemProficiencyEffect, LanguageEffect, SavingThrowProficiencyEffect, SkillProficiencyEffect, SpeedEffect, SpellEffect
 } from '../../models/effects';
 import { menu, option } from '../menu';
@@ -12,6 +12,7 @@ import { green } from 'chalk';
 import { displayMainMenu } from '../../index';
 import path from 'path';
 import { displayEffectMenu } from './effectMenu';
+import { Ability } from '../../models/abilities';
 
 export function displayEffectsMenu(rl: readline.Interface) {
   const effects = getEffects();
@@ -64,6 +65,28 @@ function displayNewEffectMenu(rl: readline.Interface) {
         );
         displayEffectMenu(effect, rl);
       });
+    }),
+    option('Initiative ability modifier bonus effect', () => {
+      rl.question('New file name: ', (fileName) => {
+        const effectPath = path.join(getEffectsDirectory(), `${fileName}.yml`);
+        const effect = new InitiativeAbilityModBonusEffect(
+          effectPath,
+          Ability.STRENGTH,
+          []
+        );
+        displayEffectMenu(effect, rl);
+      });
+    }),
+    option('Initiative bonus effect', () => {
+      rl.question('New file name: ', (fileName) => {
+        const effectPath = path.join(getEffectsDirectory(), `${fileName}.yml`);
+        const effect = new InitiativeBonusEffect(
+          effectPath,
+          0,
+          []
+        );
+        displayEffectMenu(effect, rl);
+      })
     }),
     option('Item proficiency effect', () => {
       rl.question('New file name: ', (fileName) => {

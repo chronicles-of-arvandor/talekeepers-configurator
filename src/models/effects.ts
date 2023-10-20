@@ -101,6 +101,58 @@ export class FeatEffect implements Effect {
   }
 }
 
+export class InitiativeAbilityModBonusEffect implements Effect {
+  file: string;
+  ability: Ability;
+  prerequisites: Prerequisite[];
+
+  constructor(file: string, ability: Ability, prerequisites: Prerequisite[]) {
+    this.file = file;
+    this.ability = ability;
+    this.prerequisites = prerequisites;
+  }
+
+  serialize() {
+    return {
+      '==': 'InitiativeAbilityModBonusEffect',
+      'ability': this.ability.name,
+      'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
+    }
+  }
+
+  save() {
+    fs.writeFileSync(this.file, stringify({
+      effect: this.serialize()
+    }));
+  }
+}
+
+export class InitiativeBonusEffect implements Effect {
+  file: string;
+  bonus: number;
+  prerequisites: Prerequisite[];
+
+  constructor(file: string, bonus: number, prerequisites: Prerequisite[]) {
+    this.file = file;
+    this.bonus = bonus;
+    this.prerequisites = prerequisites;
+  }
+
+  serialize() {
+    return {
+      '==': 'InitiativeBonusEffect',
+      'bonus': this.bonus,
+      'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
+    }
+  }
+
+  save() {
+    fs.writeFileSync(this.file, stringify({
+      effect: this.serialize()
+    }));
+  }
+}
+
 export class ItemProficiencyEffect implements Effect {
   file: string;
   items: string[];
@@ -116,6 +168,29 @@ export class ItemProficiencyEffect implements Effect {
     return {
       '==': 'ItemProficiencyEffect',
       'items': this.items,
+      'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
+    }
+  }
+
+  save() {
+    fs.writeFileSync(this.file, stringify({
+      effect: this.serialize()
+    }));
+  }
+}
+
+export class JackOfAllTradesEffect implements Effect {
+  file: string;
+  prerequisites: Prerequisite[];
+
+  constructor(file: string, prerequisites: Prerequisite[]) {
+    this.file = file;
+    this.prerequisites = prerequisites;
+  }
+
+  serialize() {
+    return {
+      '==': 'JackOfAllTradesEffect',
       'prerequisites': this.prerequisites.map((prerequisite) => prerequisite.serialize())
     }
   }
@@ -274,9 +349,23 @@ function deserializeEffect(file: string, serialized: { [key: string]: any }) {
       serialized['feats'],
       serialized['prerequisites'].map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite))
     );
+    case 'InitiativeAbilityModBonusEffect': return new InitiativeAbilityModBonusEffect(
+      file,
+      Ability.getByName(serialized['ability']),
+      serialized['prerequisites'].map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite))
+    );
+    case 'InitiativeBonusEffect': return new InitiativeBonusEffect(
+      file,
+      serialized['bonus'],
+      serialized['prerequisites'].map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite))
+    );
     case 'ItemProficiencyEffect': return new ItemProficiencyEffect(
       file,
       serialized['items'],
+      serialized['prerequisites'].map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite))
+    );
+    case 'JackOfAllTradesEffect': return new JackOfAllTradesEffect(
+      file,
       serialized['prerequisites'].map((prerequisite: { [key: string]: any }) => deserializePrerequisite(prerequisite))
     );
     case 'LanguageEffect': return new LanguageEffect(

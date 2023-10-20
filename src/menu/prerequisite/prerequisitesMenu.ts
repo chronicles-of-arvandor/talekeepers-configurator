@@ -70,8 +70,10 @@ export function displayPrerequisitesMenu(
       option(prerequisite.getName(), () => {
         displayPrerequisiteMenu(
           prerequisite,
-          "Back to prerequisites menu",
-          () => {
+          (prerequisite) => {
+            if (prerequisites.indexOf(prerequisite) === -1) {
+              prerequisites.push(prerequisite);
+            }
             displayPrerequisitesMenu(
               backAction,
               back,
@@ -80,9 +82,10 @@ export function displayPrerequisitesMenu(
               prerequisites,
             );
           },
-          (prerequisite) => {
-            if (prerequisites.indexOf(prerequisite) === -1) {
-              prerequisites.push(prerequisite);
+          () => {
+            const index = prerequisites.indexOf(prerequisite);
+            if (index !== -1) {
+              prerequisites.splice(index, 1);
             }
             displayPrerequisitesMenu(
               backAction,
@@ -115,9 +118,8 @@ export function displayNewPrerequisiteMenu(
       const andPrerequisite = new AndPrerequisite([]);
       displayPrerequisiteMenu(
         andPrerequisite,
-        "Back to new prerequisite menu",
-        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         rl,
       );
     }),
@@ -125,9 +127,8 @@ export function displayNewPrerequisiteMenu(
       const orPrerequisite = new OrPrerequisite([]);
       displayPrerequisiteMenu(
         orPrerequisite,
-        "Back to new prerequisite menu",
-        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         rl,
       );
     }),
@@ -135,9 +136,8 @@ export function displayNewPrerequisiteMenu(
       const notPrerequisite = new NotPrerequisite(new AndPrerequisite([]));
       displayPrerequisiteMenu(
         notPrerequisite,
-        "Back to new prerequisite menu",
-        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         rl,
       );
     }),
@@ -145,9 +145,8 @@ export function displayNewPrerequisiteMenu(
       const abilityPrerequisite = new AbilityPrerequisite(Ability.STRENGTH, 10);
       displayPrerequisiteMenu(
         abilityPrerequisite,
-        "Back to new prerequisite menu",
-        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         rl,
       );
     }),
@@ -161,9 +160,8 @@ export function displayNewPrerequisiteMenu(
       const ancestryPrerequisite = new AncestryPrerequisite(ancestries[0].id);
       displayPrerequisiteMenu(
         ancestryPrerequisite,
-        "Back to new prerequisite menu",
-        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         rl,
       );
     }),
@@ -179,9 +177,8 @@ export function displayNewPrerequisiteMenu(
       );
       displayPrerequisiteMenu(
         backgroundPrerequisite,
-        "Back to new prerequisite menu",
-        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         rl,
       );
     }),
@@ -202,9 +199,8 @@ export function displayNewPrerequisiteMenu(
       const choicePrerequisite = new ChoicePrerequisite(choice.id, option.id);
       displayPrerequisiteMenu(
         choicePrerequisite,
-        "Back to new prerequisite menu",
-        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         rl,
       );
     }),
@@ -218,9 +214,8 @@ export function displayNewPrerequisiteMenu(
       const classPrerequisite = new ClassPrerequisite(classes[0].id, 1);
       displayPrerequisiteMenu(
         classPrerequisite,
-        "Back to new prerequisite menu",
-        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         rl,
       );
     }),
@@ -234,9 +229,8 @@ export function displayNewPrerequisiteMenu(
       const featPrerequisite = new FeatPrerequisite(feats[0].id);
       displayPrerequisiteMenu(
         featPrerequisite,
-        "Back to new prerequisite menu",
-        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         rl,
       );
     }),
@@ -244,9 +238,8 @@ export function displayNewPrerequisiteMenu(
       const itemProficiencyPrerequisite = new ItemProficiencyPrerequisite([]);
       displayPrerequisiteMenu(
         itemProficiencyPrerequisite,
-        "Back to new prerequisite menu",
-        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         rl,
       );
     }),
@@ -260,9 +253,8 @@ export function displayNewPrerequisiteMenu(
       const languagePrerequisite = new LanguagePrerequisite([languages[0].id]);
       displayPrerequisiteMenu(
         languagePrerequisite,
-        "Back to new prerequisite menu",
-        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         rl,
       );
     }),
@@ -270,9 +262,8 @@ export function displayNewPrerequisiteMenu(
       const levelPrerequisite = new LevelPrerequisite(1);
       displayPrerequisiteMenu(
         levelPrerequisite,
-        "Back to new prerequisite menu",
-        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         rl,
       );
     }),
@@ -281,9 +272,8 @@ export function displayNewPrerequisiteMenu(
         new SavingThrowProficiencyPrerequisite([]);
       displayPrerequisiteMenu(
         savingThrowProficiencyPrerequisite,
-        "Back to new prerequisite menu",
-        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         rl,
       );
     }),
@@ -291,9 +281,8 @@ export function displayNewPrerequisiteMenu(
       const skillProficiencyPrerequisite = new SkillProficiencyPrerequisite([]);
       displayPrerequisiteMenu(
         skillProficiencyPrerequisite,
-        "Back to new prerequisite menu",
-        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         rl,
       );
     }),
@@ -301,9 +290,8 @@ export function displayNewPrerequisiteMenu(
       const spellPrerequisite = new SpellPrerequisite([]);
       displayPrerequisiteMenu(
         spellPrerequisite,
-        "Back to new prerequisite menu",
-        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         rl,
       );
     }),
@@ -329,9 +317,8 @@ export function displayNewPrerequisiteMenu(
       );
       displayPrerequisiteMenu(
         subAncestryPrerequisite,
-        "Back to new prerequisite menu",
-        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         rl,
       );
     }),
@@ -356,9 +343,8 @@ export function displayNewPrerequisiteMenu(
       );
       displayPrerequisiteMenu(
         subClassPrerequisite,
-        "Back to new prerequisite menu",
-        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         callback,
+        () => displayNewPrerequisiteMenu(backAction, back, callback, rl),
         rl,
       );
     }),

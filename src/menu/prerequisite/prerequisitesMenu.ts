@@ -4,14 +4,21 @@ import {
   AbilityPrerequisite,
   AncestryPrerequisite,
   AndPrerequisite,
-  ChoicePrerequisite, ClassPrerequisite,
+  BackgroundPrerequisite,
+  ChoicePrerequisite,
+  ClassPrerequisite,
   FeatPrerequisite,
   ItemProficiencyPrerequisite,
-  LanguagePrerequisite, LevelPrerequisite,
+  LanguagePrerequisite,
+  LevelPrerequisite,
   NotPrerequisite,
   OrPrerequisite,
-  Prerequisite, SavingThrowProficiencyPrerequisite,
-  SkillProficiencyPrerequisite, SpellPrerequisite, SubAncestryPrerequisite, SubClassPrerequisite
+  Prerequisite,
+  SavingThrowProficiencyPrerequisite,
+  SkillProficiencyPrerequisite,
+  SpellPrerequisite,
+  SubAncestryPrerequisite,
+  SubClassPrerequisite
 } from '../../models/prerequisites';
 import { Ability } from '../../models/abilities';
 import { getAncestries } from '../../models/ancestries';
@@ -152,7 +159,7 @@ export function displayNewPrerequisiteMenu(backAction: string, back: () => void,
         displayNewPrerequisiteMenu(backAction, back, callback, rl);
         return;
       }
-      const backgroundPrerequisite = new AncestryPrerequisite(backgrounds[0].id);
+      const backgroundPrerequisite = new BackgroundPrerequisite(backgrounds[0].id);
       displayPrerequisiteMenu(
         backgroundPrerequisite,
         'Back to new prerequisite menu',

@@ -409,7 +409,7 @@ export function deserializePrerequisite(serialized: {
   switch (serialized["=="]) {
     case "AbilityPrerequisite":
       return new AbilityPrerequisite(
-        serialized["ability"],
+        Ability.getByName(serialized["ability"]),
         serialized["score"],
       );
     case "AncestryPrerequisite":

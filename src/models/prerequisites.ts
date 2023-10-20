@@ -8,6 +8,7 @@ import { getClassById } from "./classes";
 import { getSpellById } from "./spells";
 import { getFeatById } from "./feats";
 import { getLanguageById } from "./languages";
+import { blue, green, red } from "chalk";
 
 export interface Prerequisite extends ConfigurationSerializable {
   getName(): string;
@@ -63,9 +64,14 @@ export class AndPrerequisite implements Prerequisite {
   }
 
   getName() {
-    return this.prerequisites
-      .map((prerequisite) => prerequisite.getName())
-      .join(" AND ");
+    return (
+      green("AND") +
+      "(" +
+      this.prerequisites
+        .map((prerequisite) => prerequisite.getName())
+        .join(", ") +
+      ")"
+    );
   }
 
   serialize(): { [key: string]: any } {
@@ -237,7 +243,7 @@ export class NotPrerequisite implements Prerequisite {
   }
 
   getName() {
-    return `NOT ${this.prerequisite.getName()}`;
+    return red("NOT") + "(" + this.prerequisite.getName() + ")";
   }
 
   serialize(): { [key: string]: any } {
@@ -256,9 +262,14 @@ export class OrPrerequisite implements Prerequisite {
   }
 
   getName() {
-    return this.prerequisites
-      .map((prerequisite) => prerequisite.getName())
-      .join(" OR ");
+    return (
+      blue("OR") +
+      "(" +
+      this.prerequisites
+        .map((prerequisite) => prerequisite.getName())
+        .join(", ") +
+      ")"
+    );
   }
 
   serialize(): { [key: string]: any } {

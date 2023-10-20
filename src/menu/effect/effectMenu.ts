@@ -9,6 +9,7 @@ import {
   JackOfAllTradesEffect,
   LanguageEffect,
   SavingThrowProficiencyEffect,
+  SkillExpertiseEffect,
   SkillProficiencyEffect,
   SpeedEffect,
   SpellEffect,
@@ -51,6 +52,8 @@ export function displayEffectMenu(effect: Effect, rl: readline.Interface) {
       effect as SavingThrowProficiencyEffect,
       rl,
     );
+  } else if (SkillExpertiseEffect.prototype.isPrototypeOf(effect)) {
+    displaySkillExpertiseEffectMenu(effect as SkillExpertiseEffect, rl);
   } else if (SkillProficiencyEffect.prototype.isPrototypeOf(effect)) {
     displaySkillProficiencyEffectMenu(effect as SkillProficiencyEffect, rl);
   } else if (SpeedEffect.prototype.isPrototypeOf(effect)) {
@@ -604,6 +607,79 @@ function displaySavingThrowProficiencyEffectAbilitiesMenu(
         ),
         option("Back to abilities menu", () => {
           displaySavingThrowProficiencyEffectAbilitiesMenu(effect, rl);
+        }),
+      ).display(rl);
+    }),
+    option("Back to effect menu", () => {
+      displayEffectMenu(effect, rl);
+    }),
+  ).display(rl);
+}
+
+function displaySkillExpertiseEffectMenu(
+  effect: SkillExpertiseEffect,
+  rl: readline.Interface,
+) {
+  menu(
+    path.basename(effect.file),
+    option("Skills", () => {
+      displaySkillExpertiseEffectSkillsMenu(effect, rl);
+    }),
+    option("Prerequisites", () => {
+      displayPrerequisitesMenu(
+        "Back to effect menu",
+        () => {
+          displaySkillExpertiseEffectMenu(effect, rl);
+        },
+        (prerequisites) => {
+          effect.prerequisites = prerequisites;
+          effect.save();
+          displaySkillExpertiseEffectMenu(effect, rl);
+        },
+        rl,
+        effect.prerequisites,
+      );
+    }),
+    option("Back to effects menu", () => {
+      displayEffectsMenu(rl);
+    }),
+  ).display(rl);
+}
+
+function displaySkillExpertiseEffectSkillsMenu(
+  effect: SkillExpertiseEffect,
+  rl: readline.Interface,
+) {
+  menu(
+    "Skills",
+    option("Add skill", () => {
+      displaySkillSelectionMenu(
+        "Back to skill expertise effect skills menu",
+        () => {
+          displaySkillExpertiseEffectSkillsMenu(effect, rl);
+        },
+        (skill) => {
+          effect.skills.push(skill);
+          effect.save();
+          displaySkillExpertiseEffectSkillsMenu(effect, rl);
+        },
+        rl,
+      );
+    }),
+    option("Remove skill", () => {
+      menu(
+        "Remove skill",
+        ...effect.skills.map((skill) =>
+          option(skill.displayName, () => {
+            effect.skills = effect.skills.filter(
+              (otherSkill) => otherSkill !== skill,
+            );
+            effect.save();
+            displaySkillExpertiseEffectSkillsMenu(effect, rl);
+          }),
+        ),
+        option("Back to skills menu", () => {
+          displaySkillExpertiseEffectSkillsMenu(effect, rl);
         }),
       ).display(rl);
     }),

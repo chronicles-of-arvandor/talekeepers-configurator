@@ -10,6 +10,7 @@ import {
   ItemProficiencyEffect,
   LanguageEffect,
   SavingThrowProficiencyEffect,
+  SkillExpertiseEffect,
   SkillProficiencyEffect,
   SpeedEffect,
   SpellEffect,
@@ -99,6 +100,13 @@ function displayNewEffectMenu(rl: readline.Interface) {
       rl.question("New file name: ", (fileName) => {
         const effectPath = path.join(getEffectsDirectory(), `${fileName}.yml`);
         const effect = new SavingThrowProficiencyEffect(effectPath, [], []);
+        displayEffectMenu(effect, rl);
+      });
+    }),
+    option("Skill expertise effect", () => {
+      rl.question("New file name: ", (fileName) => {
+        const effectPath = path.join(getEffectsDirectory(), `${fileName}.yml`);
+        const effect = new SkillExpertiseEffect(effectPath, [], []);
         displayEffectMenu(effect, rl);
       });
     }),

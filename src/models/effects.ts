@@ -319,6 +319,37 @@ export class SavingThrowProficiencyEffect implements Effect {
   }
 }
 
+export class SkillExpertiseEffect implements Effect {
+  file: string;
+  skills: Skill[];
+  prerequisites: Prerequisite[];
+
+  constructor(file: string, skills: Skill[], prerequisites: Prerequisite[]) {
+    this.file = file;
+    this.skills = skills;
+    this.prerequisites = prerequisites;
+  }
+
+  serialize() {
+    return {
+      "==": "SkillExpertiseEffect",
+      skills: this.skills.map((skill) => skill.name),
+      prerequisites: this.prerequisites.map((prerequisite) =>
+        prerequisite.serialize(),
+      ),
+    };
+  }
+
+  save() {
+    fs.writeFileSync(
+      this.file,
+      stringify({
+        effect: this.serialize(),
+      }),
+    );
+  }
+}
+
 export class SkillProficiencyEffect implements Effect {
   file: string;
   skills: Skill[];
@@ -494,6 +525,15 @@ function deserializeEffect(file: string, serialized: { [key: string]: any }) {
         serialized["abilities"].map((ability: string) =>
           Ability.getByName(ability),
         ),
+        serialized["prerequisites"].map(
+          (prerequisite: { [key: string]: any }) =>
+            deserializePrerequisite(prerequisite),
+        ),
+      );
+    case "SkillExpertiseEffect":
+      return new SkillExpertiseEffect(
+        file,
+        serialized["skills"].map((skill: string) => Skill.getByName(skill)),
         serialized["prerequisites"].map(
           (prerequisite: { [key: string]: any }) =>
             deserializePrerequisite(prerequisite),

@@ -8,6 +8,7 @@ import {
   InitiativeAbilityModBonusEffect,
   InitiativeBonusEffect,
   ItemProficiencyEffect,
+  JackOfAllTradesEffect,
   LanguageEffect,
   SavingThrowProficiencyEffect,
   SkillExpertiseEffect,
@@ -86,6 +87,13 @@ function displayNewEffectMenu(rl: readline.Interface) {
       rl.question("New file name: ", (fileName) => {
         const effectPath = path.join(getEffectsDirectory(), `${fileName}.yml`);
         const effect = new ItemProficiencyEffect(effectPath, [], []);
+        displayEffectMenu(effect, rl);
+      });
+    }),
+    option("Jack of all trades effect", () => {
+      rl.question("New file name: ", (fileName) => {
+        const effectPath = path.join(getEffectsDirectory(), `${fileName}.yml`);
+        const effect = new JackOfAllTradesEffect(effectPath, []);
         displayEffectMenu(effect, rl);
       });
     }),

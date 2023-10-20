@@ -527,6 +527,9 @@ function displaySubAncestryPrerequisiteMenu(prerequisite: SubAncestryPrerequisit
         rl
       );
     }),
+    option(green('Save'), () => {
+      callback(prerequisite);
+    }),
     option(backAction, back)
   ).display(rl);
 }

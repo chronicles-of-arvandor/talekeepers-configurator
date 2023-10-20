@@ -89,6 +89,7 @@ function displayAbilityEffectMenu(
     }),
     option(red("Delete"), () => {
       fs.rmSync(effect.file);
+      displayEffectsMenu(rl);
     }),
     option("Back to effects menu", () => {
       displayEffectsMenu(rl);
@@ -160,6 +161,7 @@ function displayCharacterTraitEffectMenu(
     }),
     option(red("Delete"), () => {
       fs.rmSync(effect.file);
+      displayEffectsMenu(rl);
     }),
     option("Back to effects menu", () => {
       displayEffectsMenu(rl);
@@ -226,6 +228,7 @@ function displayFeatEffectMenu(effect: FeatEffect, rl: readline.Interface) {
     }),
     option(red("Delete"), () => {
       fs.rmSync(effect.file);
+      displayEffectsMenu(rl);
     }),
     option("Back to effects menu", () => {
       displayEffectsMenu(rl);
@@ -322,6 +325,7 @@ function displayInitiativeAbilityModBonusEffectMenu(
     }),
     option(red("Delete"), () => {
       fs.rmSync(effect.file);
+      displayEffectsMenu(rl);
     }),
     option("Back to effects menu", () => {
       displayEffectsMenu(rl);
@@ -365,6 +369,7 @@ function displayInitiativeBonusEffectMenu(
     }),
     option(red("Delete"), () => {
       fs.rmSync(effect.file);
+      displayEffectsMenu(rl);
     }),
     option("Back to effects menu", () => {
       displayEffectsMenu(rl);
@@ -398,6 +403,7 @@ function displayItemProficiencyEffectMenu(
     }),
     option(red("Delete"), () => {
       fs.rmSync(effect.file);
+      displayEffectsMenu(rl);
     }),
     option("Back to effects menu", () => {
       displayEffectsMenu(rl);
@@ -464,6 +470,7 @@ function displayJackOfAllTradesEffectMenu(
     }),
     option(red("Delete"), () => {
       fs.rmSync(effect.file);
+      displayEffectsMenu(rl);
     }),
     option("Back to effects menu", () => {
       displayEffectsMenu(rl);
@@ -497,6 +504,7 @@ function displayLanguageEffectMenu(
     }),
     option(red("Delete"), () => {
       fs.rmSync(effect.file);
+      displayEffectsMenu(rl);
     }),
     option("Back to effects menu", () => {
       displayEffectsMenu(rl);
@@ -566,6 +574,7 @@ function displaySavingThrowProficiencyEffectMenu(
     }),
     option(red("Delete"), () => {
       fs.rmSync(effect.file);
+      displayEffectsMenu(rl);
     }),
     option("Back to effects menu", () => {
       displayEffectsMenu(rl);
@@ -639,6 +648,10 @@ function displaySkillExpertiseEffectMenu(
         rl,
         effect.prerequisites,
       );
+    }),
+    option(red("Delete"), () => {
+      fs.rmSync(effect.file);
+      displayEffectsMenu(rl);
     }),
     option("Back to effects menu", () => {
       displayEffectsMenu(rl);
@@ -715,6 +728,7 @@ function displaySkillProficiencyEffectMenu(
     }),
     option(red("Delete"), () => {
       fs.rmSync(effect.file);
+      displayEffectsMenu(rl);
     }),
     option("Back to effects menu", () => {
       displayEffectsMenu(rl);
@@ -798,6 +812,7 @@ function displaySpeedEffectMenu(effect: SpeedEffect, rl: readline.Interface) {
     }),
     option(red("Delete"), () => {
       fs.rmSync(effect.file);
+      displayEffectsMenu(rl);
     }),
     option("Back to effects menu", () => {
       displayEffectsMenu(rl);
@@ -828,6 +843,7 @@ function displaySpellEffectMenu(effect: SpellEffect, rl: readline.Interface) {
     }),
     option(red("Delete"), () => {
       fs.rmSync(effect.file);
+      displayEffectsMenu(rl);
     }),
     option("Back to effects menu", () => {
       displayEffectsMenu(rl);

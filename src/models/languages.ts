@@ -3,19 +3,37 @@ import * as fs from "fs";
 import { parse, stringify } from "yaml";
 import { getBaseDirectory } from "../settings";
 import { ConfigurationSerializable } from "./configurationSerializable";
+import NodeCache from "node-cache";
 
 export const getLanguagesDirectory = () =>
   path.join(getBaseDirectory(), "languages");
 
+const languageCache = new NodeCache();
+
 export const getLanguages = () => {
   return fs.readdirSync(getLanguagesDirectory()).map((languageFile) => {
-    let languagePath = path.join(getLanguagesDirectory(), languageFile);
-    return deserializeLanguage(
-      languagePath,
-      parse(fs.readFileSync(languagePath, "utf8")).language,
-    );
+    const languagePath = path.join(getLanguagesDirectory(), languageFile);
+    const cachedLanguage = languageCache.get<Language>(languagePath);
+    if (cachedLanguage) {
+      return cachedLanguage;
+    } else {
+      const language = deserializeLanguage(
+        languagePath,
+        parse(fs.readFileSync(languagePath, "utf8")).language,
+      );
+      languageCache.set(languagePath, language);
+      return language;
+    }
   });
 };
+
+fs.watch(getLanguagesDirectory(), (eventType, filename) => {
+  if (filename) {
+    const languagePath = path.join(getLanguagesDirectory(), filename);
+    languageCache.del(languagePath);
+    console.log(`Purging cached language ${languagePath} due to update`);
+  }
+});
 
 export const getLanguageById = (id: string) =>
   getLanguages().find((language) => language.id === id);

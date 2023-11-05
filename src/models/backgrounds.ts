@@ -3,15 +3,34 @@ import * as fs from "fs";
 import { parse, stringify } from "yaml";
 import { getBaseDirectory } from "../settings";
 import { ConfigurationSerializable } from "./configurationSerializable";
+import NodeCache from "node-cache";
 
 export const getBackgroundsDirectory = () =>
   path.join(getBaseDirectory(), "backgrounds");
 
+const backgroundCache = new NodeCache();
+
 export const getBackgrounds = () => {
   return fs.readdirSync(getBackgroundsDirectory()).map((backgroundFile) => {
-    return loadBackground(path.join(getBackgroundsDirectory(), backgroundFile));
+    const backgroundPath = path.join(getBackgroundsDirectory(), backgroundFile);
+    const cachedBackground = backgroundCache.get<Background>(backgroundPath);
+    if (cachedBackground) {
+      return cachedBackground;
+    } else {
+      const background = loadBackground(backgroundPath);
+      backgroundCache.set(backgroundPath, background);
+      return background;
+    }
   });
 };
+
+fs.watch(getBackgroundsDirectory(), (eventType, filename) => {
+  if (filename) {
+    const backgroundPath = path.join(getBackgroundsDirectory(), filename);
+    backgroundCache.del(backgroundPath);
+    console.log(`Purging cached background ${backgroundPath} due to update`);
+  }
+});
 
 export const getBackgroundById = (id: string) => {
   return getBackgrounds().find((background) => background.id === id);

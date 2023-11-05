@@ -5,16 +5,34 @@ import { getBaseDirectory } from "../settings";
 import { ConfigurationSerializable } from "./configurationSerializable";
 import { Distance } from "./distance";
 import * as yaml from "yaml";
+import NodeCache from "node-cache";
 
 export const getAncestriesDirectory = () =>
   path.join(getBaseDirectory(), "ancestries");
 
+const ancestryCache = new NodeCache();
+
 export const getAncestries = () => {
   return fs.readdirSync(getAncestriesDirectory()).map((ancestryFile) => {
     const ancestryPath = path.join(getAncestriesDirectory(), ancestryFile);
-    return loadAncestry(ancestryPath);
+    const cachedAncestry = ancestryCache.get<Ancestry>(ancestryPath);
+    if (cachedAncestry) {
+      return cachedAncestry;
+    } else {
+      const ancestry = loadAncestry(ancestryPath);
+      ancestryCache.set(ancestryPath, ancestry);
+      return ancestry;
+    }
   });
 };
+
+fs.watch(getAncestriesDirectory(), (eventType, filename) => {
+  if (filename) {
+    const ancestryPath = path.join(getAncestriesDirectory(), filename);
+    ancestryCache.del(ancestryPath);
+    console.log(`Purging cached ancestry ${ancestryPath} due to update`);
+  }
+});
 
 export const getAncestryById = (id: string) => {
   return getAncestries().find((ancestry) => ancestry.id === id);

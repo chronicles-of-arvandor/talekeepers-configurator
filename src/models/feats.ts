@@ -4,18 +4,37 @@ import { parse } from "yaml";
 import { getBaseDirectory } from "../settings";
 import { ConfigurationSerializable } from "./configurationSerializable";
 import { deserializeSource, Source } from "./sources";
+import NodeCache from "node-cache";
+import { getAncestriesDirectory } from "./ancestries";
 
 export const getFeatsDirectory = () => path.join(getBaseDirectory(), "feats");
+
+const featCache = new NodeCache();
 
 export const getFeats = () => {
   return fs.readdirSync(getFeatsDirectory()).map((featFile) => {
     const featPath = path.join(getFeatsDirectory(), featFile);
-    return deserializeFeat(
-      featPath,
-      parse(fs.readFileSync(featPath, "utf8")).feat,
-    );
+    const cachedFeat = featCache.get<Feat>(featPath);
+    if (cachedFeat) {
+      return cachedFeat;
+    } else {
+      const feat = deserializeFeat(
+        featPath,
+        parse(fs.readFileSync(featPath, "utf8")).feat,
+      );
+      featCache.set(featPath, feat);
+      return feat;
+    }
   });
 };
+
+fs.watch(getFeatsDirectory(), (eventType, filename) => {
+  if (filename) {
+    const featPath = path.join(getFeatsDirectory(), filename);
+    featCache.del(featPath);
+    console.log(`Purging cached feat ${featPath} due to update`);
+  }
+});
 
 export const getFeatById = (id: string) =>
   getFeats().find((feat) => feat.id === id);

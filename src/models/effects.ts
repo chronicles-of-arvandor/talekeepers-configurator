@@ -7,19 +7,37 @@ import { deserializePrerequisite, Prerequisite } from "./prerequisites";
 import { Ability } from "./abilities";
 import { CharacterTrait } from "./traits";
 import { Skill } from "./skills";
+import NodeCache from "node-cache";
 
 export const getEffectsDirectory = () =>
   path.join(getBaseDirectory(), "effects");
 
+const effectCache = new NodeCache();
+
 export const getEffects: () => Effect[] = () => {
   return fs.readdirSync(getEffectsDirectory()).map((effectFile) => {
     let effectPath = path.join(getEffectsDirectory(), effectFile);
-    return deserializeEffect(
-      effectPath,
-      parse(fs.readFileSync(effectPath, "utf8")).effect,
-    );
+    const cachedEffect = effectCache.get<Effect>(effectPath);
+    if (cachedEffect) {
+      return cachedEffect;
+    } else {
+      const effect = deserializeEffect(
+        effectPath,
+        parse(fs.readFileSync(effectPath, "utf8")).effect,
+      );
+      effectCache.set(effectPath, effect);
+      return effect;
+    }
   });
 };
+
+fs.watch(getEffectsDirectory(), (eventType, filename) => {
+  if (filename) {
+    const effectPath = path.join(getEffectsDirectory(), filename);
+    effectCache.del(effectPath);
+    console.log(`Purging cached effect ${effectPath} due to update`);
+  }
+});
 
 export interface Effect extends ConfigurationSerializable {
   file: string;

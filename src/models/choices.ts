@@ -4,19 +4,38 @@ import { parse, stringify } from "yaml";
 import { getBaseDirectory } from "../settings";
 import { deserializePrerequisite, Prerequisite } from "./prerequisites";
 import { ConfigurationSerializable } from "./configurationSerializable";
+import NodeCache from "node-cache";
+import * as events from "events";
 
 export const getChoicesDirectory = () =>
   path.join(getBaseDirectory(), "choices");
 
+const choiceCache = new NodeCache();
+
 export const getChoices = () => {
   return fs.readdirSync(getChoicesDirectory()).map((choiceFile) => {
     let choicePath = path.join(getChoicesDirectory(), choiceFile);
-    return deserializeChoice(
-      choicePath,
-      parse(fs.readFileSync(choicePath, "utf8")).choice,
-    );
+    const cachedChoice = choiceCache.get<Choice>(choicePath);
+    if (cachedChoice) {
+      return cachedChoice;
+    } else {
+      const choice = deserializeChoice(
+        choicePath,
+        parse(fs.readFileSync(choicePath, "utf8")).choice,
+      );
+      choiceCache.set(choicePath, choice);
+      return choice;
+    }
   });
 };
+
+fs.watch(getChoicesDirectory(), (eventType, filename) => {
+  if (filename) {
+    const choicePath = path.join(getChoicesDirectory(), filename);
+    choiceCache.del(choicePath);
+    console.log(`Purging cached choice ${choicePath} due to update`);
+  }
+});
 
 export const getChoiceById = (id: string) =>
   getChoices().find((choice) => choice.id === id);

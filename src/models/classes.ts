@@ -3,19 +3,38 @@ import * as fs from "fs";
 import { parse } from "yaml";
 import { getBaseDirectory } from "../settings";
 import { ConfigurationSerializable } from "./configurationSerializable";
+import NodeCache from "node-cache";
+import events from "events";
+import { getAncestriesDirectory } from "./ancestries";
 
 export const getClassesDirectory = () =>
   path.join(getBaseDirectory(), "classes");
 
+const classCache = new NodeCache();
+
 export const getClasses = () => {
   return fs.readdirSync(getClassesDirectory()).map((classFile) => {
-    return deserializeClass(
-      parse(
-        fs.readFileSync(path.join(getClassesDirectory(), classFile), "utf8"),
-      ).class,
-    );
+    const classPath = path.join(getClassesDirectory(), classFile);
+    const cachedClass = classCache.get<Clazz>(classPath);
+    if (cachedClass) {
+      return cachedClass;
+    } else {
+      const clazz = deserializeClass(
+        parse(fs.readFileSync(classPath, "utf8")).class,
+      );
+      classCache.set(classPath, clazz);
+      return clazz;
+    }
   });
 };
+
+fs.watch(getClassesDirectory(), (eventType, filename) => {
+  if (filename) {
+    const classPath = path.join(getClassesDirectory(), filename);
+    classCache.del(classPath);
+    console.log(`Purging cached class ${classPath} due to update`);
+  }
+});
 
 export const getClassById = (id: string) =>
   getClasses().find((clazz) => clazz.id === id);

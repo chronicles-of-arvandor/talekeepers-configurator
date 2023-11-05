@@ -4,18 +4,37 @@ import { parse } from "yaml";
 import { getBaseDirectory } from "../settings";
 import { ConfigurationSerializable } from "./configurationSerializable";
 import { Ability } from "./abilities";
+import NodeCache from "node-cache";
+import { getAncestriesDirectory } from "./ancestries";
 
 export const getSpellsDirectory = () => path.join(getBaseDirectory(), "spells");
 
+const spellCache = new NodeCache();
+
 export const getSpells = () => {
   return fs.readdirSync(getSpellsDirectory()).map((spellFile) => {
-    let spellPath = path.join(getSpellsDirectory(), spellFile);
-    return deserializeSpell(
-      spellPath,
-      parse(fs.readFileSync(spellPath, "utf8")).spell,
-    );
+    const spellPath = path.join(getSpellsDirectory(), spellFile);
+    const cachedSpell = spellCache.get<Spell>(spellPath);
+    if (cachedSpell) {
+      return cachedSpell;
+    } else {
+      const spell = deserializeSpell(
+        spellPath,
+        parse(fs.readFileSync(spellPath, "utf8")).spell,
+      );
+      spellCache.set(spellPath, spell);
+      return spell;
+    }
   });
 };
+
+fs.watch(getSpellsDirectory(), (eventType, filename) => {
+  if (filename) {
+    const spellPath = path.join(getSpellsDirectory(), filename);
+    spellCache.del(spellPath);
+    console.log(`Purging cached spell ${spellPath} due to update`);
+  }
+});
 
 export const getSpellById = (id: string) =>
   getSpells().find((spell) => spell.id === id);

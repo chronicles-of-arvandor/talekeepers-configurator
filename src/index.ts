@@ -5,6 +5,7 @@ import { displayAncestriesMenu } from "./menu/ancestry/ancestriesMenu";
 import { displayBackgroundsMenu } from "./menu/background/backgroundsMenu";
 import { displayChoicesMenu } from "./menu/choice/choicesMenu";
 import { displayEffectsMenu } from "./menu/effect/effectsMenu";
+import { runValidations } from "./action/runValidations";
 
 export function displayMainMenu(rl: readline.Interface) {
   menu(
@@ -33,6 +34,9 @@ export function displayMainMenu(rl: readline.Interface) {
     // option('Spells', () => {
     //   displaySpellsMenu(rl);
     // }),
+    option("Validate", () => {
+      runValidations(rl);
+    }),
     option("Settings", () => {
       displaySettingsMenu(rl);
     }),

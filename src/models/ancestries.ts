@@ -6,6 +6,7 @@ import { ConfigurationSerializable } from "./configurationSerializable";
 import { Distance } from "./distance";
 import * as yaml from "yaml";
 import NodeCache from "node-cache";
+import { gray } from "chalk";
 
 export const getAncestriesDirectory = () =>
   path.join(getBaseDirectory(), "ancestries");
@@ -30,7 +31,7 @@ fs.watch(getAncestriesDirectory(), (eventType, filename) => {
   if (filename) {
     const ancestryPath = path.join(getAncestriesDirectory(), filename);
     ancestryCache.del(ancestryPath);
-    console.log(`Purging cached ancestry ${ancestryPath} due to update`);
+    console.log(gray(`Purging cached ancestry ${ancestryPath} due to update`));
   }
 });
 

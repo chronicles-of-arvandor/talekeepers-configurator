@@ -4,6 +4,7 @@ import { parse, stringify } from "yaml";
 import { getBaseDirectory } from "../settings";
 import { ConfigurationSerializable } from "./configurationSerializable";
 import NodeCache from "node-cache";
+import { gray } from "chalk";
 
 export const getBackgroundsDirectory = () =>
   path.join(getBaseDirectory(), "backgrounds");
@@ -28,7 +29,9 @@ fs.watch(getBackgroundsDirectory(), (eventType, filename) => {
   if (filename) {
     const backgroundPath = path.join(getBackgroundsDirectory(), filename);
     backgroundCache.del(backgroundPath);
-    console.log(`Purging cached background ${backgroundPath} due to update`);
+    console.log(
+      gray(`Purging cached background ${backgroundPath} due to update`),
+    );
   }
 });
 

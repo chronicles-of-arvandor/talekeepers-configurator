@@ -5,7 +5,7 @@ import { getBaseDirectory } from "../settings";
 import { ConfigurationSerializable } from "./configurationSerializable";
 import { Ability } from "./abilities";
 import NodeCache from "node-cache";
-import { getAncestriesDirectory } from "./ancestries";
+import { gray } from "chalk";
 
 export const getSpellsDirectory = () => path.join(getBaseDirectory(), "spells");
 
@@ -32,7 +32,7 @@ fs.watch(getSpellsDirectory(), (eventType, filename) => {
   if (filename) {
     const spellPath = path.join(getSpellsDirectory(), filename);
     spellCache.del(spellPath);
-    console.log(`Purging cached spell ${spellPath} due to update`);
+    console.log(gray(`Purging cached spell ${spellPath} due to update`));
   }
 });
 

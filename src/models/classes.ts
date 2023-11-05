@@ -1,11 +1,10 @@
 import * as path from "path";
 import * as fs from "fs";
-import { parse } from "yaml";
+import { parse, stringify } from "yaml";
 import { getBaseDirectory } from "../settings";
 import { ConfigurationSerializable } from "./configurationSerializable";
 import NodeCache from "node-cache";
-import events from "events";
-import { getAncestriesDirectory } from "./ancestries";
+import { gray } from "chalk";
 
 export const getClassesDirectory = () =>
   path.join(getBaseDirectory(), "classes");
@@ -20,6 +19,7 @@ export const getClasses = () => {
       return cachedClass;
     } else {
       const clazz = deserializeClass(
+        classPath,
         parse(fs.readFileSync(classPath, "utf8")).class,
       );
       classCache.set(classPath, clazz);
@@ -32,7 +32,7 @@ fs.watch(getClassesDirectory(), (eventType, filename) => {
   if (filename) {
     const classPath = path.join(getClassesDirectory(), filename);
     classCache.del(classPath);
-    console.log(`Purging cached class ${classPath} due to update`);
+    console.log(gray(`Purging cached class ${classPath} due to update`));
   }
 });
 
@@ -112,6 +112,7 @@ function deserializeSubClass(serialized: { [key: string]: any }) {
 }
 
 export class Clazz implements ConfigurationSerializable {
+  file: string;
   id: string;
   name: string;
   subClasses: SubClass[];
@@ -121,6 +122,7 @@ export class Clazz implements ConfigurationSerializable {
   features: { [level: number]: ClassFeature[] };
 
   constructor(
+    file: string,
     id: string,
     name: string,
     subClasses: SubClass[],
@@ -129,6 +131,7 @@ export class Clazz implements ConfigurationSerializable {
     baseHp: number,
     features: { [level: number]: ClassFeature[] },
   ) {
+    this.file = file;
     this.id = id;
     this.name = name;
     this.subClasses = subClasses;
@@ -154,10 +157,20 @@ export class Clazz implements ConfigurationSerializable {
       features: this.features,
     };
   }
+
+  save() {
+    fs.writeFileSync(
+      this.file,
+      stringify({
+        class: this.serialize(),
+      }),
+    );
+  }
 }
 
-function deserializeClass(serialized: { [key: string]: any }) {
+function deserializeClass(file: string, serialized: { [key: string]: any }) {
   return new Clazz(
+    file,
     serialized["id"],
     serialized["name"],
     serialized["sub-classes"].map((subClass: { [key: string]: any }) =>

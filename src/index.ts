@@ -6,6 +6,7 @@ import { displayBackgroundsMenu } from "./menu/background/backgroundsMenu";
 import { displayChoicesMenu } from "./menu/choice/choicesMenu";
 import { displayEffectsMenu } from "./menu/effect/effectsMenu";
 import { runValidations } from "./action/runValidations";
+import { displayClassesMenu } from "./menu/clazz/classesMenu";
 
 export function displayMainMenu(rl: readline.Interface) {
   menu(
@@ -19,9 +20,9 @@ export function displayMainMenu(rl: readline.Interface) {
     option("Choices", () => {
       displayChoicesMenu(rl);
     }),
-    // option('Classes', () => {
-    //   displayClassesMenu(rl);
-    // }),
+    option("Classes", () => {
+      displayClassesMenu(rl);
+    }),
     option("Effects", () => {
       displayEffectsMenu(rl);
     }),

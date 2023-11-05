@@ -5,7 +5,7 @@ import { getBaseDirectory } from "../settings";
 import { ConfigurationSerializable } from "./configurationSerializable";
 import { deserializeSource, Source } from "./sources";
 import NodeCache from "node-cache";
-import { getAncestriesDirectory } from "./ancestries";
+import { gray } from "chalk";
 
 export const getFeatsDirectory = () => path.join(getBaseDirectory(), "feats");
 
@@ -32,7 +32,7 @@ fs.watch(getFeatsDirectory(), (eventType, filename) => {
   if (filename) {
     const featPath = path.join(getFeatsDirectory(), filename);
     featCache.del(featPath);
-    console.log(`Purging cached feat ${featPath} due to update`);
+    console.log(gray(`Purging cached feat ${featPath} due to update`));
   }
 });
 

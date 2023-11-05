@@ -4,6 +4,7 @@ import { parse, stringify } from "yaml";
 import { getBaseDirectory } from "../settings";
 import { ConfigurationSerializable } from "./configurationSerializable";
 import NodeCache from "node-cache";
+import { gray } from "chalk";
 
 export const getLanguagesDirectory = () =>
   path.join(getBaseDirectory(), "languages");
@@ -31,7 +32,7 @@ fs.watch(getLanguagesDirectory(), (eventType, filename) => {
   if (filename) {
     const languagePath = path.join(getLanguagesDirectory(), filename);
     languageCache.del(languagePath);
-    console.log(`Purging cached language ${languagePath} due to update`);
+    console.log(gray(`Purging cached language ${languagePath} due to update`));
   }
 });
 

@@ -5,7 +5,7 @@ import { getBaseDirectory } from "../settings";
 import { deserializePrerequisite, Prerequisite } from "./prerequisites";
 import { ConfigurationSerializable } from "./configurationSerializable";
 import NodeCache from "node-cache";
-import * as events from "events";
+import { gray } from "chalk";
 
 export const getChoicesDirectory = () =>
   path.join(getBaseDirectory(), "choices");
@@ -33,7 +33,7 @@ fs.watch(getChoicesDirectory(), (eventType, filename) => {
   if (filename) {
     const choicePath = path.join(getChoicesDirectory(), filename);
     choiceCache.del(choicePath);
-    console.log(`Purging cached choice ${choicePath} due to update`);
+    console.log(gray(`Purging cached choice ${choicePath} due to update`));
   }
 });
 

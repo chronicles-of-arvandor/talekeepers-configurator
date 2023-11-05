@@ -8,6 +8,7 @@ import { Ability } from "./abilities";
 import { CharacterTrait } from "./traits";
 import { Skill } from "./skills";
 import NodeCache from "node-cache";
+import { gray } from "chalk";
 
 export const getEffectsDirectory = () =>
   path.join(getBaseDirectory(), "effects");
@@ -35,7 +36,7 @@ fs.watch(getEffectsDirectory(), (eventType, filename) => {
   if (filename) {
     const effectPath = path.join(getEffectsDirectory(), filename);
     effectCache.del(effectPath);
-    console.log(`Purging cached effect ${effectPath} due to update`);
+    console.log(gray(`Purging cached effect ${effectPath} due to update`));
   }
 });
 

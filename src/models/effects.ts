@@ -462,6 +462,41 @@ export class SpellEffect implements Effect {
   }
 }
 
+export class PotionEffectEffect implements Effect {
+  file: string;
+  potionEffect: { [key: string]: any };
+  prerequisites: Prerequisite[];
+
+  constructor(
+    file: string,
+    potionEffect: { [key: string]: any },
+    prerequisites: Prerequisite[],
+  ) {
+    this.file = file;
+    this.potionEffect = potionEffect;
+    this.prerequisites = prerequisites;
+  }
+
+  serialize() {
+    return {
+      "==": "PotionEffectEffect",
+      "potion-effect": this.potionEffect,
+      prerequisites: this.prerequisites.map((prerequisite) =>
+        prerequisite.serialize(),
+      ),
+    };
+  }
+
+  save() {
+    fs.writeFileSync(
+      this.file,
+      stringify({
+        effect: this.serialize(),
+      }),
+    );
+  }
+}
+
 function deserializeEffect(file: string, serialized: { [key: string]: any }) {
   switch (serialized["=="]) {
     case "AbilityEffect":
@@ -580,6 +615,15 @@ function deserializeEffect(file: string, serialized: { [key: string]: any }) {
       return new SpellEffect(
         file,
         serialized["spells"],
+        serialized["prerequisites"].map(
+          (prerequisite: { [key: string]: any }) =>
+            deserializePrerequisite(prerequisite),
+        ),
+      );
+    case "PotionEffectEffect":
+      return new PotionEffectEffect(
+        file,
+        serialized["potion-effect"],
         serialized["prerequisites"].map(
           (prerequisite: { [key: string]: any }) =>
             deserializePrerequisite(prerequisite),

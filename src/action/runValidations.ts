@@ -465,6 +465,12 @@ function validateChoices() {
       }
     });
     choice.options.forEach((option) => {
+      if (
+        choice.options.filter((option2) => option2.text === option.text)
+          .length > 1
+      ) {
+        errors.push(`Duplicate choice options: ${option.text}`);
+      }
       option.prerequisites.forEach((prerequisite) => {
         errors.push(...validatePrerequisite(prerequisite));
         if (

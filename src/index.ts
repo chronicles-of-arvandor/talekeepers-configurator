@@ -1,6 +1,5 @@
 import * as readline from "readline";
 import { menu, option } from "./menu/menu";
-import { displaySettingsMenu } from "./menu/settings/settingsMenu";
 import { displayAncestriesMenu } from "./menu/ancestry/ancestriesMenu";
 import { displayBackgroundsMenu } from "./menu/background/backgroundsMenu";
 import { displayChoicesMenu } from "./menu/choice/choicesMenu";
@@ -37,9 +36,6 @@ export function displayMainMenu(rl: readline.Interface) {
     // }),
     option("Validate", () => {
       runValidations(rl);
-    }),
-    option("Settings", () => {
-      displaySettingsMenu(rl);
     }),
     option("Exit", () => {
       rl.close();

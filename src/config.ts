@@ -1,7 +1,6 @@
 import * as fs from "fs";
-import path from "path";
 
-const configFile = path.join(__dirname, "config.json");
+const configFile = "./config.json";
 if (!fs.existsSync(configFile)) {
   fs.writeFileSync(
     configFile,
